@@ -1,5 +1,6 @@
 import {
-    Component
+    Component,
+    Input
 }
 from '@angular/core';
 
@@ -10,5 +11,12 @@ from '@angular/core';
 })
 
 export class StockTable {
-
+    @Input() stocks
+    @Input() metaDefs
+    @Input() futureDates
+    ngOnChanges() {
+        console.log(this.stocks);
+        console.log(this.metaDefs);
+        console.log(this.futureDates);
+    }
 }

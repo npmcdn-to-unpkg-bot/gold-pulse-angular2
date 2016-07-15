@@ -1,1 +1,17 @@
-<p>Bear is on the move!</p>
+<div class="well table-responsive">
+    <table class="table table-striped table-hover table-bordered table-condensed">
+        <thead class='thead-default'>
+            <tr>
+                <td *ngFor='let metaDef of metaDefs'><a href="">{{metaDef.short}}</a></td>
+                <td *ngFor='let ymd of futureDates'>{{ymd}}</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor='let stock of stocks'>
+                <td *ngFor='let metaDef of metaDefs'>{{stock[metaDef.sid]}}</td>
+                <td *ngFor='let ymd of futureDates'>p.h.</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

@@ -37,7 +37,6 @@ export class ExplorationViewer {
   ngOnInit() {
     this._dataService.getData().subscribe((processedData) => {
       [this.stocks, this.metaDefs, this.futureDates] = processedData;
-      console.log(this.stocks);
     });
   }
 }

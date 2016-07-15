@@ -24,7 +24,6 @@ var ExplorationViewer = (function () {
         var _this = this;
         this._dataService.getData().subscribe(function (processedData) {
             _this.stocks = processedData[0], _this.metaDefs = processedData[1], _this.futureDates = processedData[2];
-            console.log(_this.stocks);
         });
     };
     ExplorationViewer = __decorate([

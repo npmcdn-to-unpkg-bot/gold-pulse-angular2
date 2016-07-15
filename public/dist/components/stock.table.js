@@ -12,6 +12,23 @@ var core_1 = require('@angular/core');
 var StockTable = (function () {
     function StockTable() {
     }
+    StockTable.prototype.ngOnChanges = function () {
+        console.log(this.stocks);
+        console.log(this.metaDefs);
+        console.log(this.futureDates);
+    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], StockTable.prototype, "stocks", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], StockTable.prototype, "metaDefs", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], StockTable.prototype, "futureDates", void 0);
     StockTable = __decorate([
         core_1.Component({
             selector: 'stock-table',

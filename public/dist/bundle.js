@@ -44489,7 +44489,6 @@ var ExplorationViewer = (function () {
         var _this = this;
         this._dataService.getData().subscribe(function (processedData) {
             _this.stocks = processedData[0], _this.metaDefs = processedData[1], _this.futureDates = processedData[2];
-            console.log(_this.stocks);
         });
     };
     ExplorationViewer = __decorate([
@@ -44520,6 +44519,23 @@ var core_1 = require('@angular/core');
 var StockTable = (function () {
     function StockTable() {
     }
+    StockTable.prototype.ngOnChanges = function () {
+        console.log(this.stocks);
+        console.log(this.metaDefs);
+        console.log(this.futureDates);
+    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], StockTable.prototype, "stocks", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], StockTable.prototype, "metaDefs", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], StockTable.prototype, "futureDates", void 0);
     StockTable = __decorate([
         core_1.Component({
             selector: 'stock-table',
@@ -44559,6 +44575,7 @@ var DataService = (function () {
         var dates = raw_data.dates, metaDefs = raw_data.meta_definitions;
         var stocks = dates[0].oids, futureDates = dates.map(function (date) { return date.ymd; });
         futureDates.splice(0, 1);
+        metaDefs.splice(0, 1);
         var _loop_1 = function(stock) {
             var id = stock.id;
             var closes = [];

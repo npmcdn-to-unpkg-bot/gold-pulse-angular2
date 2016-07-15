@@ -19,6 +19,7 @@ var DataService = (function () {
         var dates = raw_data.dates, metaDefs = raw_data.meta_definitions;
         var stocks = dates[0].oids, futureDates = dates.map(function (date) { return date.ymd; });
         futureDates.splice(0, 1);
+        metaDefs.splice(0, 1);
         var _loop_1 = function(stock) {
             var id = stock.id;
             var closes = [];
