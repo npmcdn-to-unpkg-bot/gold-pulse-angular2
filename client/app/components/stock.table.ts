@@ -4,10 +4,13 @@ import {
 }
 from '@angular/core';
 
+//import Match pipe, which matches future dates to closing prices
+import { MatchPipe } from '../pipes/match.pipe';
 
 @Component({
     selector: 'stock-table',
-    templateUrl: './templates/stock.table.html'
+    templateUrl: './templates/stock.table.html',
+    pipes: [MatchPipe]
 })
 
 export class StockTable {

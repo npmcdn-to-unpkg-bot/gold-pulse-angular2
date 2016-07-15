@@ -21,13 +21,16 @@ var DataService = (function () {
         futureDates.splice(0, 1);
         metaDefs.splice(0, 1);
         var _loop_1 = function(stock) {
-            var id = stock.id;
+            var id = stock.id, close_1 = stock.c;
             var closes = [];
             var _loop_2 = function(ymd) {
-                var oid = dates.find(function (date) { return date.ymd === ymd; }).oids.find(function (oid) { return oid.id === id; }), close_1 = oid ? oid.c : "NA";
+                var oid = dates.find(function (date) { return date.ymd === ymd; }).oids.find(function (oid) { return oid.id === id; }), futureClose = oid ? oid.c : 'NA', change = (!isNaN(close_1) && close_1 !== 0 && !isNaN(futureClose)) ?
+                    (((futureClose - close_1) / close_1) * 100).toFixed(1) + "%" :
+                    'NA';
                 closes.push({
                     ymd: ymd,
-                    close: close_1
+                    "close": futureClose,
+                    change: change
                 });
             };
             for (var _i = 0, futureDates_1 = futureDates; _i < futureDates_1.length; _i++) {

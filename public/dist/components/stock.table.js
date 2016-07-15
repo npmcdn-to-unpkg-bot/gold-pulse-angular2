@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var match_pipe_1 = require('../pipes/match.pipe');
 var StockTable = (function () {
     function StockTable() {
     }
@@ -32,7 +33,8 @@ var StockTable = (function () {
     StockTable = __decorate([
         core_1.Component({
             selector: 'stock-table',
-            templateUrl: './templates/stock.table.html'
+            templateUrl: './templates/stock.table.html',
+            pipes: [match_pipe_1.MatchPipe]
         }), 
         __metadata('design:paramtypes', [])
     ], StockTable);

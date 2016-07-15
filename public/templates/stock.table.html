@@ -9,7 +9,7 @@
         <tbody>
             <tr *ngFor='let stock of stocks'>
                 <td *ngFor='let metaDef of metaDefs'>{{stock[metaDef.sid]}}</td>
-                <td *ngFor='let ymd of futureDates'>p.h.</td>
+                <td *ngFor='let ymd of futureDates'>{{stock.closes | match: ymd}}</td>
             </tr>
         </tbody>
     </table>

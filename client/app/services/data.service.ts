@@ -23,15 +23,20 @@ export class DataService {
 
         //add closing prices for the future dates;
         for (let stock of stocks) {
-            const id = stock.id;
+            const id = stock.id,
+                close = stock.c;
             let closes = [];
             for (let ymd of futureDates) {
                 const oid = dates.find((date) => date.ymd === ymd).oids.find((oid) => oid.id === id),
-                    close = oid ? oid.c : "NA";
+                    futureClose = oid ? oid.c : 'NA',
+                    change = (!isNaN(close) && close !== 0 && !isNaN(futureClose)) ?
+                    `${(((futureClose - close)/close)*100).toFixed(1)}%` :
+                    'NA'
 
                 closes.push({
                     ymd,
-                    close
+                    "close": futureClose,
+                    change
                 });
             }
             stock.closes = closes;

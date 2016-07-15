@@ -44504,7 +44504,7 @@ var ExplorationViewer = (function () {
 }());
 exports.ExplorationViewer = ExplorationViewer;
 
-},{"../services/data.service":353,"./stock.table":351,"@angular/core":148,"@angular/http":238}],351:[function(require,module,exports){
+},{"../services/data.service":354,"./stock.table":351,"@angular/core":148,"@angular/http":238}],351:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44516,6 +44516,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var match_pipe_1 = require('../pipes/match.pipe');
 var StockTable = (function () {
     function StockTable() {
     }
@@ -44539,7 +44540,8 @@ var StockTable = (function () {
     StockTable = __decorate([
         core_1.Component({
             selector: 'stock-table',
-            templateUrl: './templates/stock.table.html'
+            templateUrl: './templates/stock.table.html',
+            pipes: [match_pipe_1.MatchPipe]
         }), 
         __metadata('design:paramtypes', [])
     ], StockTable);
@@ -44547,13 +44549,42 @@ var StockTable = (function () {
 }());
 exports.StockTable = StockTable;
 
-},{"@angular/core":148}],352:[function(require,module,exports){
+},{"../pipes/match.pipe":353,"@angular/core":148}],352:[function(require,module,exports){
 "use strict";
 var exploration_viewer_1 = require('./components/exploration.viewer');
 var platform_browser_dynamic_1 = require('@angular/platform-browser-dynamic');
 platform_browser_dynamic_1.bootstrap(exploration_viewer_1.ExplorationViewer);
 
 },{"./components/exploration.viewer":350,"@angular/platform-browser-dynamic":259}],353:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var MatchPipe = (function () {
+    function MatchPipe() {
+    }
+    MatchPipe.prototype.transform = function (value, args) {
+        var ymd = args, match = value.find(function (el) { return el.ymd === ymd; });
+        return (match) ? match.change : 'NA';
+    };
+    MatchPipe = __decorate([
+        core_1.Pipe({
+            name: 'match'
+        }), 
+        __metadata('design:paramtypes', [])
+    ], MatchPipe);
+    return MatchPipe;
+}());
+exports.MatchPipe = MatchPipe;
+
+},{"@angular/core":148}],354:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44577,13 +44608,16 @@ var DataService = (function () {
         futureDates.splice(0, 1);
         metaDefs.splice(0, 1);
         var _loop_1 = function(stock) {
-            var id = stock.id;
+            var id = stock.id, close_1 = stock.c;
             var closes = [];
             var _loop_2 = function(ymd) {
-                var oid = dates.find(function (date) { return date.ymd === ymd; }).oids.find(function (oid) { return oid.id === id; }), close_1 = oid ? oid.c : "NA";
+                var oid = dates.find(function (date) { return date.ymd === ymd; }).oids.find(function (oid) { return oid.id === id; }), futureClose = oid ? oid.c : 'NA', change = (!isNaN(close_1) && close_1 !== 0 && !isNaN(futureClose)) ?
+                    (((futureClose - close_1) / close_1) * 100).toFixed(1) + "%" :
+                    'NA';
                 closes.push({
                     ymd: ymd,
-                    close: close_1
+                    "close": futureClose,
+                    change: change
                 });
             };
             for (var _i = 0, futureDates_1 = futureDates; _i < futureDates_1.length; _i++) {
