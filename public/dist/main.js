@@ -1,5 +1,5 @@
 "use strict";
-var app_component_1 = require('./app.component');
+var exploration_viewer_1 = require('./components/exploration.viewer');
 var platform_browser_dynamic_1 = require('@angular/platform-browser-dynamic');
-platform_browser_dynamic_1.bootstrap(app_component_1.AppComponent);
+platform_browser_dynamic_1.bootstrap(exploration_viewer_1.ExplorationViewer);
 //# sourceMappingURL=main.js.map

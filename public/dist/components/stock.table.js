@@ -9,17 +9,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var AppComponent = (function () {
-    function AppComponent() {
+var StockTable = (function () {
+    function StockTable() {
     }
-    AppComponent = __decorate([
+    StockTable = __decorate([
         core_1.Component({
-            selector: 'my-app',
-            template: 'Bear is on the move!'
+            selector: 'stock-table',
+            templateUrl: './templates/stock.table.html'
         }), 
         __metadata('design:paramtypes', [])
-    ], AppComponent);
-    return AppComponent;
+    ], StockTable);
+    return StockTable;
 }());
-exports.AppComponent = AppComponent;
-//# sourceMappingURL=app.component.js.map
+exports.StockTable = StockTable;
+//# sourceMappingURL=stock.table.js.map

@@ -46,5 +46,6 @@
     "host": "packages-16-east.internal.npmjs.com",
     "tmp": "tmp/core-2.0.0-rc.4.tgz_1467308861507_0.20231292047537863"
   },
-  "directories": {}
+  "directories": {},
+  "readme": "ERROR: No README data found!"
 }

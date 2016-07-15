@@ -12,6 +12,10 @@
     "build_prod": "npm run build && browserify -s main public/dist/main.js > public/dist/bundle.js && npm run minify",
     "minify": "uglifyjs public/dist/bundle.js --screw-ie8 --compress --mangle --output public/dist/bundle.min.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaxBoykoII/gold-pulse-angular2.git"
+  },
   "keywords": [
     "node",
     "angular2"

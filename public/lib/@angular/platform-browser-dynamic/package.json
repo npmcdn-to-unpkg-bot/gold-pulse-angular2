@@ -48,5 +48,6 @@
     "host": "packages-16-east.internal.npmjs.com",
     "tmp": "tmp/platform-browser-dynamic-2.0.0-rc.4.tgz_1467308883902_0.3862463873811066"
   },
-  "directories": {}
+  "directories": {},
+  "readme": "ERROR: No README data found!"
 }

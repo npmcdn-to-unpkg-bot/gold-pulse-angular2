@@ -45,5 +45,6 @@
     "host": "packages-12-west.internal.npmjs.com",
     "tmp": "tmp/compiler-2.0.0-rc.4.tgz_1467308849422_0.7418568241409957"
   },
-  "directories": {}
+  "directories": {},
+  "readme": "ERROR: No README data found!"
 }

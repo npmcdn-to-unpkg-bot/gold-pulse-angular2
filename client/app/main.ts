@@ -1,5 +1,5 @@
 
-import { AppComponent } from './app.component';
+import { ExplorationViewer } from './components/exploration.viewer';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 
-bootstrap(AppComponent);
+bootstrap(ExplorationViewer);
