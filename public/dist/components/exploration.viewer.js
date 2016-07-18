@@ -11,7 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
 var stock_table_1 = require('./stock.table');
+var date_component_1 = require('./date.component');
 var data_service_1 = require('../services/data.service');
+var date_service_1 = require('../services/date.service');
 var ExplorationViewer = (function () {
     function ExplorationViewer(_dataService) {
         this._dataService = _dataService;
@@ -20,6 +22,15 @@ var ExplorationViewer = (function () {
         this.metaDefs = [];
         this.futureDates = [];
     }
+    ExplorationViewer.prototype.update = function (event) {
+        var _this = this;
+        this.currentDate = event;
+        console.log(event);
+        this._dataService.getData(event).subscribe(function (processedData) {
+            _this.stocks = processedData[0], _this.metaDefs = processedData[1], _this.futureDates = processedData[2];
+            console.log(_this.stocks);
+        });
+    };
     ExplorationViewer.prototype.ngOnInit = function () {
         var _this = this;
         this._dataService.getData().subscribe(function (processedData) {
@@ -30,8 +41,8 @@ var ExplorationViewer = (function () {
         core_1.Component({
             selector: 'exploration-viewer',
             templateUrl: './templates/exploration.viewer.html',
-            directives: [stock_table_1.StockTable],
-            providers: [http_1.HTTP_PROVIDERS, data_service_1.DataService]
+            directives: [stock_table_1.StockTable, date_component_1.DateComponent],
+            providers: [http_1.HTTP_PROVIDERS, data_service_1.DataService, date_service_1.DateService]
         }), 
         __metadata('design:paramtypes', [data_service_1.DataService])
     ], ExplorationViewer);

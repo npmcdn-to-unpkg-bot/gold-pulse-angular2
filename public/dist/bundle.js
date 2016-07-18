@@ -44474,9 +44474,85 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var date_service_1 = require('../services/date.service');
+var DateComponent = (function () {
+    function DateComponent(dateService) {
+        this.dateService = dateService;
+        this.validDates = [];
+        this.inputDate = {
+            'ymd': '',
+            'valid': true
+        };
+        this.updateCurrentDate = new core_1.EventEmitter();
+    }
+    DateComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.dateService.getValidDates().subscribe(function (dates) {
+            _this.validDates = dates;
+            var length = dates.length;
+            if (length) {
+                _this.min = dates[0];
+                _this.max = dates[length - 1];
+            }
+        });
+    };
+    DateComponent.prototype.flag = function (event) {
+        var invalid = isNaN(Date.parse(event));
+        this.inputDate.valid = !invalid;
+    };
+    DateComponent.prototype.submit = function () {
+        var timeStamp = Date.parse(this.inputDate.ymd);
+        if (!isNaN(timeStamp)) {
+            var closest = this.validDates.filter(function (ymd) { return Date.parse(ymd) >= timeStamp; }).reduce(function (acc, curr) {
+                var diff1 = Date.parse(curr) - timeStamp, diff2 = Date.parse(acc) - timeStamp;
+                return (diff1 < diff2) ? curr : acc;
+            });
+            this.inputDate.ymd = closest;
+            this.updateCurrentDate.emit(this.inputDate.ymd);
+        }
+        else {
+            alert('Invalid date!');
+        }
+    };
+    DateComponent.prototype.ngOnChanges = function () {
+    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], DateComponent.prototype, "currentDate", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], DateComponent.prototype, "updateCurrentDate", void 0);
+    DateComponent = __decorate([
+        core_1.Component({
+            selector: 'date-component',
+            templateUrl: './templates/date.component.html',
+            styleUrls: ['./css/date.component.css']
+        }), 
+        __metadata('design:paramtypes', [date_service_1.DateService])
+    ], DateComponent);
+    return DateComponent;
+}());
+exports.DateComponent = DateComponent;
+
+},{"../services/date.service":357,"@angular/core":148}],351:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
 var stock_table_1 = require('./stock.table');
+var date_component_1 = require('./date.component');
 var data_service_1 = require('../services/data.service');
+var date_service_1 = require('../services/date.service');
 var ExplorationViewer = (function () {
     function ExplorationViewer(_dataService) {
         this._dataService = _dataService;
@@ -44485,6 +44561,15 @@ var ExplorationViewer = (function () {
         this.metaDefs = [];
         this.futureDates = [];
     }
+    ExplorationViewer.prototype.update = function (event) {
+        var _this = this;
+        this.currentDate = event;
+        console.log(event);
+        this._dataService.getData(event).subscribe(function (processedData) {
+            _this.stocks = processedData[0], _this.metaDefs = processedData[1], _this.futureDates = processedData[2];
+            console.log(_this.stocks);
+        });
+    };
     ExplorationViewer.prototype.ngOnInit = function () {
         var _this = this;
         this._dataService.getData().subscribe(function (processedData) {
@@ -44495,8 +44580,8 @@ var ExplorationViewer = (function () {
         core_1.Component({
             selector: 'exploration-viewer',
             templateUrl: './templates/exploration.viewer.html',
-            directives: [stock_table_1.StockTable],
-            providers: [http_1.HTTP_PROVIDERS, data_service_1.DataService]
+            directives: [stock_table_1.StockTable, date_component_1.DateComponent],
+            providers: [http_1.HTTP_PROVIDERS, data_service_1.DataService, date_service_1.DateService]
         }), 
         __metadata('design:paramtypes', [data_service_1.DataService])
     ], ExplorationViewer);
@@ -44504,7 +44589,7 @@ var ExplorationViewer = (function () {
 }());
 exports.ExplorationViewer = ExplorationViewer;
 
-},{"../services/data.service":354,"./stock.table":351,"@angular/core":148,"@angular/http":238}],351:[function(require,module,exports){
+},{"../services/data.service":356,"../services/date.service":357,"./date.component":350,"./stock.table":352,"@angular/core":148,"@angular/http":238}],352:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44517,14 +44602,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var match_pipe_1 = require('../pipes/match.pipe');
+var sort_pipe_1 = require('../pipes/sort.pipe');
 var StockTable = (function () {
     function StockTable() {
+        this.selection = null;
     }
-    StockTable.prototype.ngOnChanges = function () {
-        console.log(this.stocks);
-        console.log(this.metaDefs);
-        console.log(this.futureDates);
+    StockTable.prototype.set = function (event, sid) {
+        event.preventDefault();
+        this.selection = sid;
     };
+    StockTable.prototype.ngOnChanges = function () { };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Object)
@@ -44541,7 +44628,8 @@ var StockTable = (function () {
         core_1.Component({
             selector: 'stock-table',
             templateUrl: './templates/stock.table.html',
-            pipes: [match_pipe_1.MatchPipe]
+            styleUrls: ['./css/stock.table.css'],
+            pipes: [match_pipe_1.MatchPipe, sort_pipe_1.SortPipe]
         }), 
         __metadata('design:paramtypes', [])
     ], StockTable);
@@ -44549,13 +44637,13 @@ var StockTable = (function () {
 }());
 exports.StockTable = StockTable;
 
-},{"../pipes/match.pipe":353,"@angular/core":148}],352:[function(require,module,exports){
+},{"../pipes/match.pipe":354,"../pipes/sort.pipe":355,"@angular/core":148}],353:[function(require,module,exports){
 "use strict";
 var exploration_viewer_1 = require('./components/exploration.viewer');
 var platform_browser_dynamic_1 = require('@angular/platform-browser-dynamic');
 platform_browser_dynamic_1.bootstrap(exploration_viewer_1.ExplorationViewer);
 
-},{"./components/exploration.viewer":350,"@angular/platform-browser-dynamic":259}],353:[function(require,module,exports){
+},{"./components/exploration.viewer":351,"@angular/platform-browser-dynamic":259}],354:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44584,7 +44672,50 @@ var MatchPipe = (function () {
 }());
 exports.MatchPipe = MatchPipe;
 
-},{"@angular/core":148}],354:[function(require,module,exports){
+},{"@angular/core":148}],355:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var SortPipe = (function () {
+    function SortPipe() {
+    }
+    SortPipe.prototype.transform = function (stocks, args) {
+        var sid = args, alpha = (sid === 'n' || sid === 't') ? 1 : -1;
+        if (stocks && stocks.length && sid) {
+            stocks.sort(function (s1, s2) {
+                var a = s1[sid], b = s2[sid];
+                if (a < b) {
+                    return -1 * alpha;
+                }
+                else if (a > b) {
+                    return 1 * alpha;
+                }
+                else {
+                    return 0;
+                }
+            });
+        }
+        return stocks;
+    };
+    SortPipe = __decorate([
+        core_1.Pipe({
+            name: 'sort'
+        }), 
+        __metadata('design:paramtypes', [])
+    ], SortPipe);
+    return SortPipe;
+}());
+exports.SortPipe = SortPipe;
+
+},{"@angular/core":148}],356:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44648,5 +44779,36 @@ var DataService = (function () {
 }());
 exports.DataService = DataService;
 
-},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":334}]},{},[352])(352)
+},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":334}],357:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var http_1 = require('@angular/http');
+require('rxjs/add/operator/map');
+var DateService = (function () {
+    function DateService(http) {
+        this.http = http;
+    }
+    DateService.prototype.getValidDates = function () {
+        return this.http.get('../valid-dates-api.php').map(function (response) {
+            return response.json();
+        });
+    };
+    DateService = __decorate([
+        core_1.Injectable(), 
+        __metadata('design:paramtypes', [http_1.Http])
+    ], DateService);
+    return DateService;
+}());
+exports.DateService = DateService;
+
+},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":334}]},{},[353])(353)
 });

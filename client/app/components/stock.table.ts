@@ -4,22 +4,34 @@ import {
 }
 from '@angular/core';
 
-//import Match pipe, which matches future dates to closing prices
-import { MatchPipe } from '../pipes/match.pipe';
+//import MatchPipe, which matches future dates to closing prices
+import {
+    MatchPipe
+}
+from '../pipes/match.pipe';
+
+//import SortPipe which ranks stocks in descending order according to metric selected by user
+import {
+    SortPipe
+}
+from '../pipes/sort.pipe';
 
 @Component({
     selector: 'stock-table',
     templateUrl: './templates/stock.table.html',
-    pipes: [MatchPipe]
+    styleUrls: ['./css/stock.table.css'],
+    pipes: [MatchPipe, SortPipe]
 })
 
 export class StockTable {
     @Input() stocks
     @Input() metaDefs
     @Input() futureDates
-    ngOnChanges() {
-        console.log(this.stocks);
-        console.log(this.metaDefs);
-        console.log(this.futureDates);
+    selection = null
+    set(event, sid) {
+        event.preventDefault();
+        this.selection = sid;
     }
+
+    ngOnChanges() {}
 }

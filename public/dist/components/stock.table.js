@@ -10,14 +10,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var match_pipe_1 = require('../pipes/match.pipe');
+var sort_pipe_1 = require('../pipes/sort.pipe');
 var StockTable = (function () {
     function StockTable() {
+        this.selection = null;
     }
-    StockTable.prototype.ngOnChanges = function () {
-        console.log(this.stocks);
-        console.log(this.metaDefs);
-        console.log(this.futureDates);
+    StockTable.prototype.set = function (event, sid) {
+        event.preventDefault();
+        this.selection = sid;
     };
+    StockTable.prototype.ngOnChanges = function () { };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Object)
@@ -34,7 +36,8 @@ var StockTable = (function () {
         core_1.Component({
             selector: 'stock-table',
             templateUrl: './templates/stock.table.html',
-            pipes: [match_pipe_1.MatchPipe]
+            styleUrls: ['./css/stock.table.css'],
+            pipes: [match_pipe_1.MatchPipe, sort_pipe_1.SortPipe]
         }), 
         __metadata('design:paramtypes', [])
     ], StockTable);
