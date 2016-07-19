@@ -19,6 +19,50 @@ var StockTable = (function () {
         event.preventDefault();
         this.selection = sid;
     };
+    StockTable.prototype.averageByStock = function (stock) {
+        var sum = 0, count = 0;
+        for (var _i = 0, _a = stock.closes; _i < _a.length; _i++) {
+            var date = _a[_i];
+            var change = parseFloat(date.change);
+            if (!isNaN(change)) {
+                sum += change;
+                count++;
+            }
+        }
+        return sum / count;
+    };
+    StockTable.prototype.averageByMetric = function (metaDef) {
+        var sid = metaDef.sid;
+        var stocks = this.stocks;
+        if (sid !== 'n' && sid !== 't') {
+            stocks.sort(function (s1, s2) {
+                var a = s1[sid], b = s2[sid];
+                if (a < b) {
+                    return 1;
+                }
+                else if (a > b) {
+                    return -1;
+                }
+                else {
+                    return 0;
+                }
+            });
+            stocks = stocks.slice(0, this.limit);
+            var sum = 0, count = 0;
+            for (var _i = 0, stocks_1 = stocks; _i < stocks_1.length; _i++) {
+                var stock = stocks_1[_i];
+                var avg = this.averageByStock(stock);
+                if (!isNaN(avg)) {
+                    sum += avg;
+                    count++;
+                }
+            }
+            return (sum / count).toFixed(1) + "%";
+        }
+        else {
+            return null;
+        }
+    };
     StockTable.prototype.ngOnChanges = function () { };
     __decorate([
         core_1.Input(), 
@@ -32,6 +76,10 @@ var StockTable = (function () {
         core_1.Input(), 
         __metadata('design:type', Object)
     ], StockTable.prototype, "futureDates", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], StockTable.prototype, "limit", void 0);
     StockTable = __decorate([
         core_1.Component({
             selector: 'stock-table',

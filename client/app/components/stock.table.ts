@@ -27,11 +27,60 @@ export class StockTable {
     @Input() stocks
     @Input() metaDefs
     @Input() futureDates
+    @Input() limit
     selection = null
     set(event, sid) {
         event.preventDefault();
         this.selection = sid;
     }
+    averageByStock(stock) {
+        let sum = 0,
+            count = 0;
+        for (let date of stock.closes) {
+            const change = parseFloat(date.change)
+            if (!isNaN(change)) {
+                sum += change;
+                count++;
+            }
+        }
+
+        return sum / count;
+    }
+    averageByMetric(metaDef) {
+        const sid = metaDef.sid;
+        let stocks = this.stocks;
+        if (sid !== 'n' && sid !== 't') {
+            stocks.sort((s1, s2) => {
+                const a = s1[sid],
+                    b = s2[sid];
+
+                if (a < b) {
+                    return 1;
+                }
+                else if (a > b) {
+                    return -1;
+                }
+                else {
+                    return 0;
+                }
+            });
+            stocks = stocks.slice(0, this.limit);
+            let sum = 0,
+                count = 0;
+            for (let stock of stocks) {
+                const avg = this.averageByStock(stock);
+                if (!isNaN(avg)) {
+                    sum += avg;
+                    count++;
+                }
+            }
+            return `${(sum / count).toFixed(1)}%`;
+        }
+        else {
+            return null;
+        }
+    }
+
 
     ngOnChanges() {}
 }

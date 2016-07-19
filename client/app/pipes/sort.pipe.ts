@@ -29,7 +29,7 @@ export class SortPipe implements PipeTransform {
                 else {
                     return 0;
                 }
-            })
+            });
         }
         return stocks;
     }

@@ -21,6 +21,7 @@ var ExplorationViewer = (function () {
         this.stocks = [];
         this.metaDefs = [];
         this.futureDates = [];
+        this.limit = 25;
     }
     ExplorationViewer.prototype.update = function (event) {
         var _this = this;

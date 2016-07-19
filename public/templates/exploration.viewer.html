@@ -1,4 +1,24 @@
 <h1> TSX/TSXv Gold Explorers / Developers</h1>
 <h2>Fundamental Data Exploration Tool</h2>
-<date-component [currentDate]='currentDate' (updateCurrentDate)='update($event)'></date-component>
-<stock-table [stocks]='stocks' [metaDefs]='metaDefs' [futureDates]='futureDates'></stock-table>
+<div class='row'>
+  <div class='col-sm-6'>
+    <date-component [currentDate]='currentDate' (updateCurrentDate)='update($event)'>
+    </date-component>
+  </div>
+  <div class='col-sm-6'>
+    <ul class="nav nav-tabs">
+      <li class="active dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="">Limit to: {{limit}} <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="#" (click)='limit = 25'>25</a></li>
+          <li><a href="#" (click)='limit = 50'>50</a></li>
+          <li><a href="#" (click)='limit = 100'>100</a></li>
+          <li><a href="#" (click)='limit = stocks.length'>{{stocks.length}}</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+<stock-table [stocks]='stocks' [metaDefs]='metaDefs' [futureDates]='futureDates' [limit]='limit'></stock-table>

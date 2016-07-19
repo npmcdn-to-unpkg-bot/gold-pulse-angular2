@@ -41,6 +41,7 @@ export class ExplorationViewer {
   stocks = []
   metaDefs = []
   futureDates = []
+  limit = 25
   update(event) {
     this.currentDate = event;
     console.log(event);
