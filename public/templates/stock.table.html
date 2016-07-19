@@ -9,14 +9,14 @@
             </tr>
             <tr>
                 <td></td>
-                <td *ngFor='let metaDef of metaDefs'>{{averageByMetric(metaDef)}}</td>
+                <td *ngFor='let metaDef of metaDefs' [class.highlight]='selection === metaDef.sid'>{{averageByMetric(metaDef)}}</td>
                 <td *ngFor='let ymd of futureDates'></td>
                 <td *ngIf='futureDates.length'></td>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor='let stock of stocks | sort: selection | slice:0:limit'>
-                <td>{{stocks.indexOf(stock) + 1}}</td>
+            <tr *ngFor='let stock of stocks | sort: selection | slice:0:limit; let i = index'>
+                <td>{{i + 1}}</td>
                 <td *ngFor='let metaDef of metaDefs' [class.highlight]='selection === metaDef.sid'>{{stock[metaDef.sid]}}</td>
                 <td *ngFor='let ymd of futureDates'>{{stock.closes | match: ymd}}</td>
                 <td *ngIf='futureDates.length'>{{averageByStock(stock)}}</td>

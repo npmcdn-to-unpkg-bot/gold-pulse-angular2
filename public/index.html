@@ -9,6 +9,10 @@
 
 <body>
     <exploration-viewer class="container"></exploration-viewer>
+
+    <!-- Polyfill(s) for older browsers -->
+    <script src="./lib/core-js/client/shim.min.js"></script>
+
     <!-- Load Angular2 libraries -->
     <script src="./lib/zone.js/dist/zone.js"></script>
     <script src="./lib/reflect-metadata/Reflect.js"></script>
@@ -16,6 +20,7 @@
     <!-- Load Bower Components -->
     <script src="./lib/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="./lib/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
     <!-- Load minified bundle -->
     <script src="./dist/bundle.min.js"></script>
 </body>
