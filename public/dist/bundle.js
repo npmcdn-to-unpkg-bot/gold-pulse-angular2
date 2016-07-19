@@ -44536,7 +44536,7 @@ var DateComponent = (function () {
 }());
 exports.DateComponent = DateComponent;
 
-},{"../services/date.service":357,"@angular/core":148}],351:[function(require,module,exports){
+},{"../services/date.service":358,"@angular/core":148}],351:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44590,7 +44590,7 @@ var ExplorationViewer = (function () {
 }());
 exports.ExplorationViewer = ExplorationViewer;
 
-},{"../services/data.service":356,"../services/date.service":357,"./date.component":350,"./stock.table":352,"@angular/core":148,"@angular/http":238}],352:[function(require,module,exports){
+},{"../services/data.service":357,"../services/date.service":358,"./date.component":350,"./stock.table":352,"@angular/core":148,"@angular/http":238}],352:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44604,6 +44604,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var match_pipe_1 = require('../pipes/match.pipe');
 var sort_pipe_1 = require('../pipes/sort.pipe');
+var custom_percent_pipe_1 = require('../pipes/custom-percent.pipe');
 var StockTable = (function () {
     function StockTable() {
         this.selection = null;
@@ -44650,7 +44651,7 @@ var StockTable = (function () {
                     count++;
                 }
             }
-            return (sum / count).toFixed(1) + "%";
+            return sum / count;
         }
         else {
             return null;
@@ -44678,7 +44679,7 @@ var StockTable = (function () {
             selector: 'stock-table',
             templateUrl: './templates/stock.table.html',
             styleUrls: ['./css/stock.table.css'],
-            pipes: [match_pipe_1.MatchPipe, sort_pipe_1.SortPipe]
+            pipes: [match_pipe_1.MatchPipe, sort_pipe_1.SortPipe, custom_percent_pipe_1.CustomPercentPipe]
         }), 
         __metadata('design:paramtypes', [])
     ], StockTable);
@@ -44686,13 +44687,41 @@ var StockTable = (function () {
 }());
 exports.StockTable = StockTable;
 
-},{"../pipes/match.pipe":354,"../pipes/sort.pipe":355,"@angular/core":148}],353:[function(require,module,exports){
+},{"../pipes/custom-percent.pipe":354,"../pipes/match.pipe":355,"../pipes/sort.pipe":356,"@angular/core":148}],353:[function(require,module,exports){
 "use strict";
 var exploration_viewer_1 = require('./components/exploration.viewer');
 var platform_browser_dynamic_1 = require('@angular/platform-browser-dynamic');
 platform_browser_dynamic_1.bootstrap(exploration_viewer_1.ExplorationViewer);
 
 },{"./components/exploration.viewer":351,"@angular/platform-browser-dynamic":259}],354:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var CustomPercentPipe = (function () {
+    function CustomPercentPipe() {
+    }
+    CustomPercentPipe.prototype.transform = function (value) {
+        return !isNaN(value) && value !== null ? (value).toFixed(1) + "%" : null;
+    };
+    CustomPercentPipe = __decorate([
+        core_1.Pipe({
+            name: 'cpercent'
+        }), 
+        __metadata('design:paramtypes', [])
+    ], CustomPercentPipe);
+    return CustomPercentPipe;
+}());
+exports.CustomPercentPipe = CustomPercentPipe;
+
+},{"@angular/core":148}],355:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44721,7 +44750,7 @@ var MatchPipe = (function () {
 }());
 exports.MatchPipe = MatchPipe;
 
-},{"@angular/core":148}],355:[function(require,module,exports){
+},{"@angular/core":148}],356:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44764,7 +44793,7 @@ var SortPipe = (function () {
 }());
 exports.SortPipe = SortPipe;
 
-},{"@angular/core":148}],356:[function(require,module,exports){
+},{"@angular/core":148}],357:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44828,7 +44857,7 @@ var DataService = (function () {
 }());
 exports.DataService = DataService;
 
-},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":334}],357:[function(require,module,exports){
+},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":334}],358:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

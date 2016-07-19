@@ -10,17 +10,23 @@ import {
 }
 from '../pipes/match.pipe';
 
-//import SortPipe which ranks stocks in descending order according to metric selected by user
+//import SortPipe, which ranks stocks in descending order according to metric selected by user
 import {
     SortPipe
 }
 from '../pipes/sort.pipe';
 
+//import PercentPipe, which formats decimal data
+
+import { CustomPercentPipe }
+
+from '../pipes/custom-percent.pipe';
+
 @Component({
     selector: 'stock-table',
     templateUrl: './templates/stock.table.html',
     styleUrls: ['./css/stock.table.css'],
-    pipes: [MatchPipe, SortPipe]
+    pipes: [MatchPipe, SortPipe, CustomPercentPipe]
 })
 
 export class StockTable {
@@ -74,7 +80,7 @@ export class StockTable {
                     count++;
                 }
             }
-            return `${(sum / count).toFixed(1)}%`;
+            return sum / count;
         }
         else {
             return null;
