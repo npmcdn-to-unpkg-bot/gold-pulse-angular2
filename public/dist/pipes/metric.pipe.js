@@ -9,35 +9,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var SortPipe = (function () {
-    function SortPipe() {
+var constants_1 = require('../constants');
+var MetricPipe = (function () {
+    function MetricPipe() {
     }
-    SortPipe.prototype.transform = function (stocks, args) {
-        var sid = args, alpha = (sid === 'n' || sid === 't') ? 1 : -1;
-        if (stocks && stocks.length && sid) {
-            stocks.sort(function (s1, s2) {
-                var a = s1[sid], b = s2[sid];
-                if (a < b) {
-                    return -1 * alpha;
-                }
-                else if (a > b) {
-                    return 1 * alpha;
-                }
-                else {
-                    return 0;
-                }
-            });
-        }
-        return stocks;
+    MetricPipe.prototype.transform = function (metaDefs) {
+        return metaDefs.filter(function (metaDef) { return constants_1.excluded.indexOf(metaDef.sid) === -1; });
     };
-    SortPipe = __decorate([
+    MetricPipe = __decorate([
         core_1.Pipe({
-            name: 'sort',
-            pure: false
+            name: 'metric'
         }), 
         __metadata('design:paramtypes', [])
-    ], SortPipe);
-    return SortPipe;
+    ], MetricPipe);
+    return MetricPipe;
 }());
-exports.SortPipe = SortPipe;
-//# sourceMappingURL=sort.pipe.js.map
+exports.MetricPipe = MetricPipe;
+//# sourceMappingURL=metric.pipe.js.map

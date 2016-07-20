@@ -22,6 +22,7 @@ var ExplorationViewer = (function () {
         this.metaDefs = [];
         this.futureDates = [];
         this.limit = 25;
+        this.limitOptions = [25, 50, 75, 100];
     }
     ExplorationViewer.prototype.update = function (event) {
         var _this = this;
@@ -29,7 +30,9 @@ var ExplorationViewer = (function () {
         console.log(event);
         this._dataService.getData(event).subscribe(function (processedData) {
             _this.stocks = processedData[0], _this.metaDefs = processedData[1], _this.futureDates = processedData[2];
-            console.log(_this.stocks);
+            if (_this.limit > _this.stocks.length || _this.limitOptions.indexOf(_this.limit) === -1) {
+                _this.limit = _this.stocks.length;
+            }
         });
     };
     ExplorationViewer.prototype.ngOnInit = function () {
@@ -42,6 +45,7 @@ var ExplorationViewer = (function () {
         core_1.Component({
             selector: 'exploration-viewer',
             templateUrl: './templates/exploration.viewer.html',
+            styleUrls: ['./css/exploration.viewer.css'],
             directives: [stock_table_1.StockTable, date_component_1.DateComponent],
             providers: [http_1.HTTP_PROVIDERS, data_service_1.DataService, date_service_1.DateService]
         }), 

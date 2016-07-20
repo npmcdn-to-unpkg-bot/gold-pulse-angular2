@@ -30,6 +30,7 @@ from '../services/date.service';
 @Component({
   selector: 'exploration-viewer',
   templateUrl: './templates/exploration.viewer.html',
+  styleUrls: ['./css/exploration.viewer.css'],
   directives: [StockTable, DateComponent],
   providers: [HTTP_PROVIDERS, DataService, DateService]
 })
@@ -42,12 +43,15 @@ export class ExplorationViewer {
   metaDefs = []
   futureDates = []
   limit = 25
+  limitOptions = [25, 50, 75, 100]
   update(event) {
     this.currentDate = event;
     console.log(event);
     this._dataService.getData(event).subscribe((processedData) => {
       [this.stocks, this.metaDefs, this.futureDates] = processedData;
-      console.log(this.stocks);
+      if (this.limit > this.stocks.length || this.limitOptions.indexOf(this.limit) === -1) {
+        this.limit = this.stocks.length
+      }
     });
   }
   ngOnInit() {

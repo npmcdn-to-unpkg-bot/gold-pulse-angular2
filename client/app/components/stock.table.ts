@@ -18,15 +18,22 @@ from '../pipes/sort.pipe';
 
 //import PercentPipe, which formats decimal data
 
-import { CustomPercentPipe }
-
+import {
+    CustomPercentPipe
+}
 from '../pipes/custom-percent.pipe';
+
+//import MetricPipe, which returns the metadefinitons that are metrics
+import {
+    MetricPipe
+}
+from '../pipes/metric.pipe';
 
 @Component({
     selector: 'stock-table',
     templateUrl: './templates/stock.table.html',
     styleUrls: ['./css/stock.table.css'],
-    pipes: [MatchPipe, SortPipe, CustomPercentPipe]
+    pipes: [MatchPipe, SortPipe, CustomPercentPipe, MetricPipe]
 })
 
 export class StockTable {
@@ -88,5 +95,7 @@ export class StockTable {
     }
 
 
-    ngOnChanges() {}
+    ngOnChanges(change) {
+        console.log(change);
+    }
 }

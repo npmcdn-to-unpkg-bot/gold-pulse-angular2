@@ -12,6 +12,7 @@ var core_1 = require('@angular/core');
 var match_pipe_1 = require('../pipes/match.pipe');
 var sort_pipe_1 = require('../pipes/sort.pipe');
 var custom_percent_pipe_1 = require('../pipes/custom-percent.pipe');
+var metric_pipe_1 = require('../pipes/metric.pipe');
 var StockTable = (function () {
     function StockTable() {
         this.selection = null;
@@ -64,7 +65,9 @@ var StockTable = (function () {
             return null;
         }
     };
-    StockTable.prototype.ngOnChanges = function () { };
+    StockTable.prototype.ngOnChanges = function (change) {
+        console.log(change);
+    };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Object)
@@ -86,7 +89,7 @@ var StockTable = (function () {
             selector: 'stock-table',
             templateUrl: './templates/stock.table.html',
             styleUrls: ['./css/stock.table.css'],
-            pipes: [match_pipe_1.MatchPipe, sort_pipe_1.SortPipe, custom_percent_pipe_1.CustomPercentPipe]
+            pipes: [match_pipe_1.MatchPipe, sort_pipe_1.SortPipe, custom_percent_pipe_1.CustomPercentPipe, metric_pipe_1.MetricPipe]
         }), 
         __metadata('design:paramtypes', [])
     ], StockTable);

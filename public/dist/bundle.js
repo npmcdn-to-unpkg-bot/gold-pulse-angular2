@@ -44536,7 +44536,7 @@ var DateComponent = (function () {
 }());
 exports.DateComponent = DateComponent;
 
-},{"../services/date.service":358,"@angular/core":148}],351:[function(require,module,exports){
+},{"../services/date.service":360,"@angular/core":148}],351:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44561,6 +44561,7 @@ var ExplorationViewer = (function () {
         this.metaDefs = [];
         this.futureDates = [];
         this.limit = 25;
+        this.limitOptions = [25, 50, 75, 100];
     }
     ExplorationViewer.prototype.update = function (event) {
         var _this = this;
@@ -44568,7 +44569,9 @@ var ExplorationViewer = (function () {
         console.log(event);
         this._dataService.getData(event).subscribe(function (processedData) {
             _this.stocks = processedData[0], _this.metaDefs = processedData[1], _this.futureDates = processedData[2];
-            console.log(_this.stocks);
+            if (_this.limit > _this.stocks.length || _this.limitOptions.indexOf(_this.limit) === -1) {
+                _this.limit = _this.stocks.length;
+            }
         });
     };
     ExplorationViewer.prototype.ngOnInit = function () {
@@ -44581,6 +44584,7 @@ var ExplorationViewer = (function () {
         core_1.Component({
             selector: 'exploration-viewer',
             templateUrl: './templates/exploration.viewer.html',
+            styleUrls: ['./css/exploration.viewer.css'],
             directives: [stock_table_1.StockTable, date_component_1.DateComponent],
             providers: [http_1.HTTP_PROVIDERS, data_service_1.DataService, date_service_1.DateService]
         }), 
@@ -44590,7 +44594,7 @@ var ExplorationViewer = (function () {
 }());
 exports.ExplorationViewer = ExplorationViewer;
 
-},{"../services/data.service":357,"../services/date.service":358,"./date.component":350,"./stock.table":352,"@angular/core":148,"@angular/http":238}],352:[function(require,module,exports){
+},{"../services/data.service":359,"../services/date.service":360,"./date.component":350,"./stock.table":352,"@angular/core":148,"@angular/http":238}],352:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44605,6 +44609,7 @@ var core_1 = require('@angular/core');
 var match_pipe_1 = require('../pipes/match.pipe');
 var sort_pipe_1 = require('../pipes/sort.pipe');
 var custom_percent_pipe_1 = require('../pipes/custom-percent.pipe');
+var metric_pipe_1 = require('../pipes/metric.pipe');
 var StockTable = (function () {
     function StockTable() {
         this.selection = null;
@@ -44657,7 +44662,9 @@ var StockTable = (function () {
             return null;
         }
     };
-    StockTable.prototype.ngOnChanges = function () { };
+    StockTable.prototype.ngOnChanges = function (change) {
+        console.log(change);
+    };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Object)
@@ -44679,7 +44686,7 @@ var StockTable = (function () {
             selector: 'stock-table',
             templateUrl: './templates/stock.table.html',
             styleUrls: ['./css/stock.table.css'],
-            pipes: [match_pipe_1.MatchPipe, sort_pipe_1.SortPipe, custom_percent_pipe_1.CustomPercentPipe]
+            pipes: [match_pipe_1.MatchPipe, sort_pipe_1.SortPipe, custom_percent_pipe_1.CustomPercentPipe, metric_pipe_1.MetricPipe]
         }), 
         __metadata('design:paramtypes', [])
     ], StockTable);
@@ -44687,13 +44694,20 @@ var StockTable = (function () {
 }());
 exports.StockTable = StockTable;
 
-},{"../pipes/custom-percent.pipe":354,"../pipes/match.pipe":355,"../pipes/sort.pipe":356,"@angular/core":148}],353:[function(require,module,exports){
+},{"../pipes/custom-percent.pipe":355,"../pipes/match.pipe":356,"../pipes/metric.pipe":357,"../pipes/sort.pipe":358,"@angular/core":148}],353:[function(require,module,exports){
+"use strict";
+var excluded = ['t', 'n'];
+exports.excluded = excluded;
+
+},{}],354:[function(require,module,exports){
 "use strict";
 var exploration_viewer_1 = require('./components/exploration.viewer');
 var platform_browser_dynamic_1 = require('@angular/platform-browser-dynamic');
+var core_1 = require('@angular/core');
+core_1.enableProdMode();
 platform_browser_dynamic_1.bootstrap(exploration_viewer_1.ExplorationViewer);
 
-},{"./components/exploration.viewer":351,"@angular/platform-browser-dynamic":259}],354:[function(require,module,exports){
+},{"./components/exploration.viewer":351,"@angular/core":148,"@angular/platform-browser-dynamic":259}],355:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44721,7 +44735,7 @@ var CustomPercentPipe = (function () {
 }());
 exports.CustomPercentPipe = CustomPercentPipe;
 
-},{"@angular/core":148}],355:[function(require,module,exports){
+},{"@angular/core":148}],356:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44750,7 +44764,36 @@ var MatchPipe = (function () {
 }());
 exports.MatchPipe = MatchPipe;
 
-},{"@angular/core":148}],356:[function(require,module,exports){
+},{"@angular/core":148}],357:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var constants_1 = require('../constants');
+var MetricPipe = (function () {
+    function MetricPipe() {
+    }
+    MetricPipe.prototype.transform = function (metaDefs) {
+        return metaDefs.filter(function (metaDef) { return constants_1.excluded.indexOf(metaDef.sid) === -1; });
+    };
+    MetricPipe = __decorate([
+        core_1.Pipe({
+            name: 'metric'
+        }), 
+        __metadata('design:paramtypes', [])
+    ], MetricPipe);
+    return MetricPipe;
+}());
+exports.MetricPipe = MetricPipe;
+
+},{"../constants":353,"@angular/core":148}],358:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44785,7 +44828,8 @@ var SortPipe = (function () {
     };
     SortPipe = __decorate([
         core_1.Pipe({
-            name: 'sort'
+            name: 'sort',
+            pure: false
         }), 
         __metadata('design:paramtypes', [])
     ], SortPipe);
@@ -44793,7 +44837,7 @@ var SortPipe = (function () {
 }());
 exports.SortPipe = SortPipe;
 
-},{"@angular/core":148}],357:[function(require,module,exports){
+},{"@angular/core":148}],359:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44857,7 +44901,7 @@ var DataService = (function () {
 }());
 exports.DataService = DataService;
 
-},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":334}],358:[function(require,module,exports){
+},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":334}],360:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44888,5 +44932,5 @@ var DateService = (function () {
 }());
 exports.DateService = DateService;
 
-},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":334}]},{},[353])(353)
+},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":334}]},{},[354])(354)
 });

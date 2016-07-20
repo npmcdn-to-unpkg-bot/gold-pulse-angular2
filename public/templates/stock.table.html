@@ -1,17 +1,27 @@
+<div class="container well table-responsive">
+    <table class="table table-striped table-condensed">
+        <caption>Average returns by metric for top {{limit}} stocks</caption>
+        <thead>
+            <tr>
+                <td *ngFor='let metaDef of metaDefs | metric' [class.highlight]='selection === metaDef.sid'><a href="" [class.highlight]='selection === metaDef.sid' (click)='set($event, metaDef.sid)'>{{metaDef.short}}</a></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td *ngFor='let metaDef of metaDefs | metric' [class.highlight]='selection === metaDef.sid'>{{averageByMetric(metaDef) | cpercent}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 <div class="well table-responsive">
     <table class="table table-striped table-hover table-bordered table-condensed">
-        <thead class='thead-default'>
+        <thead>
             <tr>
                 <td>#</td>
                 <td *ngFor='let metaDef of metaDefs' [class.highlight]='selection === metaDef.sid'><a href="" [class.highlight]='selection === metaDef.sid' (click)='set($event, metaDef.sid)'>{{metaDef.short}}</a></td>
                 <td *ngFor='let ymd of futureDates'>{{ymd}}</td>
                 <td *ngIf='futureDates.length'>Average</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td *ngFor='let metaDef of metaDefs' [class.highlight]='selection === metaDef.sid'>{{averageByMetric(metaDef) | cpercent}}</td>
-                <td *ngFor='let ymd of futureDates'></td>
-                <td *ngIf='futureDates.length'></td>
             </tr>
         </thead>
         <tbody>
