@@ -44561,6 +44561,7 @@ var stock_table_1 = require('./stock.table');
 var date_component_1 = require('./date.component');
 var data_service_1 = require('../services/data.service');
 var date_service_1 = require('../services/date.service');
+var quantile_service_1 = require('../services/quantile.service');
 var shorten_pipe_1 = require('../pipes/shorten.pipe');
 var ExplorationViewer = (function () {
     function ExplorationViewer(_dataService) {
@@ -44596,7 +44597,7 @@ var ExplorationViewer = (function () {
             styleUrls: ['./css/exploration.viewer.css'],
             directives: [stock_table_1.StockTable, date_component_1.DateComponent],
             pipes: [shorten_pipe_1.ShortenPipe],
-            providers: [http_1.HTTP_PROVIDERS, data_service_1.DataService, date_service_1.DateService]
+            providers: [http_1.HTTP_PROVIDERS, data_service_1.DataService, date_service_1.DateService, quantile_service_1.QuantileService]
         }), 
         __metadata('design:paramtypes', [data_service_1.DataService])
     ], ExplorationViewer);
@@ -44604,7 +44605,7 @@ var ExplorationViewer = (function () {
 }());
 exports.ExplorationViewer = ExplorationViewer;
 
-},{"../constants":353,"../pipes/shorten.pipe":358,"../services/data.service":360,"../services/date.service":361,"./date.component":350,"./stock.table":352,"@angular/core":148,"@angular/http":238}],352:[function(require,module,exports){
+},{"../constants":353,"../pipes/shorten.pipe":358,"../services/data.service":360,"../services/date.service":361,"../services/quantile.service":362,"./date.component":350,"./stock.table":352,"@angular/core":148,"@angular/http":238}],352:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44623,6 +44624,7 @@ var metric_pipe_1 = require('../pipes/metric.pipe');
 var StockTable = (function () {
     function StockTable() {
         this.selection = null;
+        this.stockAverages = {};
     }
     StockTable.prototype.set = function (event, sid) {
         event.preventDefault();
@@ -44672,8 +44674,13 @@ var StockTable = (function () {
             return null;
         }
     };
-    StockTable.prototype.ngOnChanges = function (change) {
-        console.log(change);
+    StockTable.prototype.ngOnChanges = function (changes) {
+        if (changes.stocks) {
+            for (var _i = 0, _a = this.stocks; _i < _a.length; _i++) {
+                var stock = _a[_i];
+                this.stockAverages[stock.id] = this.averageByStock(stock);
+            }
+        }
     };
     __decorate([
         core_1.Input(), 
@@ -44929,7 +44936,6 @@ var DataService = (function () {
     DataService.prototype.getData = function (query) {
         var _this = this;
         if (query === void 0) { query = ''; }
-        console.log('...retrieving data from GoldMinerPulse API');
         return this.http.get("../edp-api-v3a.php?m=" + query).map(function (response) {
             return response.json();
         }).map(function (data) { return _this.processData(data); });
@@ -44973,5 +44979,31 @@ var DateService = (function () {
 }());
 exports.DateService = DateService;
 
-},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":334}]},{},[354])(354)
+},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":334}],362:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var QuantileService = (function () {
+    function QuantileService() {
+    }
+    QuantileService.prototype.setQuartiles = function () {
+        console.log('setting Quartiles!');
+    };
+    QuantileService = __decorate([
+        core_1.Injectable(), 
+        __metadata('design:paramtypes', [])
+    ], QuantileService);
+    return QuantileService;
+}());
+exports.QuantileService = QuantileService;
+
+},{"@angular/core":148}]},{},[354])(354)
 });

@@ -33,6 +33,10 @@ import {
   DateService
 }
 from '../services/date.service';
+import {
+  QuantileService
+}
+from '../services/quantile.service';
 
 //import pipes
 import {
@@ -46,7 +50,7 @@ from '../pipes/shorten.pipe';
   styleUrls: ['./css/exploration.viewer.css'],
   directives: [StockTable, DateComponent],
   pipes: [ShortenPipe],
-  providers: [HTTP_PROVIDERS, DataService, DateService]
+  providers: [HTTP_PROVIDERS, DataService, DateService, QuantileService]
 })
 export class ExplorationViewer {
   constructor(private _dataService: DataService) {

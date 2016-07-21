@@ -16,6 +16,7 @@ var metric_pipe_1 = require('../pipes/metric.pipe');
 var StockTable = (function () {
     function StockTable() {
         this.selection = null;
+        this.stockAverages = {};
     }
     StockTable.prototype.set = function (event, sid) {
         event.preventDefault();
@@ -65,8 +66,13 @@ var StockTable = (function () {
             return null;
         }
     };
-    StockTable.prototype.ngOnChanges = function (change) {
-        console.log(change);
+    StockTable.prototype.ngOnChanges = function (changes) {
+        if (changes.stocks) {
+            for (var _i = 0, _a = this.stocks; _i < _a.length; _i++) {
+                var stock = _a[_i];
+                this.stockAverages[stock.id] = this.averageByStock(stock);
+            }
+        }
     };
     __decorate([
         core_1.Input(), 

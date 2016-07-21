@@ -42,6 +42,7 @@ export class StockTable {
     @Input() futureDates
     @Input() limit
     selection = null
+    stockAverages = {};
     set(event, sid) {
         event.preventDefault();
         this.selection = sid;
@@ -95,7 +96,11 @@ export class StockTable {
     }
 
 
-    ngOnChanges(change) {
-        console.log(change);
+    ngOnChanges(changes) {
+        if (changes.stocks) {
+            for (let stock of this.stocks) {
+                this.stockAverages[stock.id] = this.averageByStock(stock);
+            }
+        }
     }
 }

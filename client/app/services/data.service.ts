@@ -45,7 +45,6 @@ export class DataService {
     }
 
     getData(query = '') {
-        console.log('...retrieving data from GoldMinerPulse API');
         return this.http.get(`../edp-api-v3a.php?m=${query}`).map(response => {
             return response.json();
         }).map(data => this.processData(data));

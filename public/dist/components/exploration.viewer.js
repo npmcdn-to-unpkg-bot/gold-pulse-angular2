@@ -15,6 +15,7 @@ var stock_table_1 = require('./stock.table');
 var date_component_1 = require('./date.component');
 var data_service_1 = require('../services/data.service');
 var date_service_1 = require('../services/date.service');
+var quantile_service_1 = require('../services/quantile.service');
 var shorten_pipe_1 = require('../pipes/shorten.pipe');
 var ExplorationViewer = (function () {
     function ExplorationViewer(_dataService) {
@@ -50,7 +51,7 @@ var ExplorationViewer = (function () {
             styleUrls: ['./css/exploration.viewer.css'],
             directives: [stock_table_1.StockTable, date_component_1.DateComponent],
             pipes: [shorten_pipe_1.ShortenPipe],
-            providers: [http_1.HTTP_PROVIDERS, data_service_1.DataService, date_service_1.DateService]
+            providers: [http_1.HTTP_PROVIDERS, data_service_1.DataService, date_service_1.DateService, quantile_service_1.QuantileService]
         }), 
         __metadata('design:paramtypes', [data_service_1.DataService])
     ], ExplorationViewer);

@@ -29,7 +29,7 @@
                 <td>{{i + 1}}</td>
                 <td *ngFor='let metaDef of metaDefs' [class.highlight]='selection === metaDef.sid'>{{stock[metaDef.sid]}}</td>
                 <td *ngFor='let ymd of futureDates'>{{stock.closes | match: ymd}}</td>
-                <td *ngIf='futureDates.length'>{{averageByStock(stock) | cpercent}}</td>
+                <td *ngIf='futureDates.length'>{{stockAverages[stock.id] | cpercent}}</td>
             </tr>
         </tbody>
     </table>

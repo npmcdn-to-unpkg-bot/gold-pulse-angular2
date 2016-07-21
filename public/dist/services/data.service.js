@@ -48,7 +48,6 @@ var DataService = (function () {
     DataService.prototype.getData = function (query) {
         var _this = this;
         if (query === void 0) { query = ''; }
-        console.log('...retrieving data from GoldMinerPulse API');
         return this.http.get("../edp-api-v3a.php?m=" + query).map(function (response) {
             return response.json();
         }).map(function (data) { return _this.processData(data); });
