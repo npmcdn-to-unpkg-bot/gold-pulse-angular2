@@ -12,10 +12,7 @@
         <a class="dropdown-toggle" data-toggle="dropdown" href="">Limit to: {{limit}} <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-          <li><a href="#" *ngIf='stocks.length > 25' (click)='limit = 25'>25</a></li>
-          <li><a href="#" *ngIf='stocks.length > 50' (click)='limit = 50'>50</a></li>
-          <li><a href="#" *ngIf='stocks.length > 75' (click)='limit = 75'>75</a></li>
-          <li><a href="#" *ngIf='stocks.length > 100' (click)='limit = 100'>100</a></li>
+          <li *ngFor='let option of limitOptions | shorten: stocks.length'><a href="#" (click)='limit = option'>{{option}}</a></li>
           <li><a href="#" (click)='limit = stocks.length'>{{stocks.length}}</a>
           </li>
         </ul>

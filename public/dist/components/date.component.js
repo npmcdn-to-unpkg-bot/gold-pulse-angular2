@@ -49,6 +49,13 @@ var DateComponent = (function () {
             alert('Invalid date!');
         }
     };
+    DateComponent.prototype.increment = function (change) {
+        var index = this.validDates.indexOf(this.currentDate), indexLast = this.validDates.length - 1;
+        if (index > 0 && index < indexLast) {
+            var newIndex = (change === 'up') ? (index + 1) : (index - 1), newCurrentDate = this.validDates[newIndex];
+            this.updateCurrentDate.emit(newCurrentDate);
+        }
+    };
     DateComponent.prototype.ngOnChanges = function () {
     };
     __decorate([

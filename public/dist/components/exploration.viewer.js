@@ -10,19 +10,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
+var constants_1 = require('../constants');
 var stock_table_1 = require('./stock.table');
 var date_component_1 = require('./date.component');
 var data_service_1 = require('../services/data.service');
 var date_service_1 = require('../services/date.service');
+var shorten_pipe_1 = require('../pipes/shorten.pipe');
 var ExplorationViewer = (function () {
     function ExplorationViewer(_dataService) {
         this._dataService = _dataService;
-        this.currentDate = '2014-01-02';
+        this.currentDate = constants_1.start;
         this.stocks = [];
         this.metaDefs = [];
         this.futureDates = [];
-        this.limit = 25;
-        this.limitOptions = [25, 50, 75, 100];
+        this.limit = constants_1.limitOptions[0];
+        this.limitOptions = constants_1.limitOptions;
     }
     ExplorationViewer.prototype.update = function (event) {
         var _this = this;
@@ -47,6 +49,7 @@ var ExplorationViewer = (function () {
             templateUrl: './templates/exploration.viewer.html',
             styleUrls: ['./css/exploration.viewer.css'],
             directives: [stock_table_1.StockTable, date_component_1.DateComponent],
+            pipes: [shorten_pipe_1.ShortenPipe],
             providers: [http_1.HTTP_PROVIDERS, data_service_1.DataService, date_service_1.DateService]
         }), 
         __metadata('design:paramtypes', [data_service_1.DataService])

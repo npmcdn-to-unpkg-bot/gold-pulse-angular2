@@ -1,10 +1,16 @@
 :host {
     text-align: center;
 }
+
 .invalid {
     border-color: #FA787E;
 }
 
 .valid {
     border-color: #78FA89;
+}
+
+form {
+    display: inline-block;
+    text-align: center;
 }

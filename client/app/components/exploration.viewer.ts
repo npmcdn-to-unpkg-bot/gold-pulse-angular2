@@ -7,6 +7,13 @@ import {
 }
 from '@angular/http';
 
+//import constants
+import {
+  limitOptions,
+  start
+}
+from '../constants';
+
 //import subcomponents (directives)
 import {
   StockTable
@@ -27,23 +34,30 @@ import {
 }
 from '../services/date.service';
 
+//import pipes
+import {
+  ShortenPipe
+}
+from '../pipes/shorten.pipe';
+
 @Component({
   selector: 'exploration-viewer',
   templateUrl: './templates/exploration.viewer.html',
   styleUrls: ['./css/exploration.viewer.css'],
   directives: [StockTable, DateComponent],
+  pipes: [ShortenPipe],
   providers: [HTTP_PROVIDERS, DataService, DateService]
 })
 export class ExplorationViewer {
   constructor(private _dataService: DataService) {
 
   }
-  currentDate = '2014-01-02'
+  currentDate = start
   stocks = []
   metaDefs = []
   futureDates = []
-  limit = 25
-  limitOptions = [25, 50, 75, 100]
+  limit = limitOptions[0]
+  limitOptions = limitOptions
   update(event) {
     this.currentDate = event;
     console.log(event);

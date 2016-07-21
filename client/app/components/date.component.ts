@@ -59,6 +59,15 @@ export class DateComponent {
         }
 
     }
+    increment(change) {
+        const index = this.validDates.indexOf(this.currentDate),
+            indexLast = this.validDates.length - 1;
+        if (index > 0 && index < indexLast) {
+            const newIndex = (change === 'up') ? (index + 1) : (index - 1),
+                newCurrentDate = this.validDates[newIndex];
+            this.updateCurrentDate.emit(newCurrentDate);
+        }
+    }
     ngOnChanges() {
 
     }

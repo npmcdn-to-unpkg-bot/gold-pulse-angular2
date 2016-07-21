@@ -44514,6 +44514,13 @@ var DateComponent = (function () {
             alert('Invalid date!');
         }
     };
+    DateComponent.prototype.increment = function (change) {
+        var index = this.validDates.indexOf(this.currentDate), indexLast = this.validDates.length - 1;
+        if (index > 0 && index < indexLast) {
+            var newIndex = (change === 'up') ? (index + 1) : (index - 1), newCurrentDate = this.validDates[newIndex];
+            this.updateCurrentDate.emit(newCurrentDate);
+        }
+    };
     DateComponent.prototype.ngOnChanges = function () {
     };
     __decorate([
@@ -44536,7 +44543,7 @@ var DateComponent = (function () {
 }());
 exports.DateComponent = DateComponent;
 
-},{"../services/date.service":360,"@angular/core":148}],351:[function(require,module,exports){
+},{"../services/date.service":361,"@angular/core":148}],351:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44549,19 +44556,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
+var constants_1 = require('../constants');
 var stock_table_1 = require('./stock.table');
 var date_component_1 = require('./date.component');
 var data_service_1 = require('../services/data.service');
 var date_service_1 = require('../services/date.service');
+var shorten_pipe_1 = require('../pipes/shorten.pipe');
 var ExplorationViewer = (function () {
     function ExplorationViewer(_dataService) {
         this._dataService = _dataService;
-        this.currentDate = '2014-01-02';
+        this.currentDate = constants_1.start;
         this.stocks = [];
         this.metaDefs = [];
         this.futureDates = [];
-        this.limit = 25;
-        this.limitOptions = [25, 50, 75, 100];
+        this.limit = constants_1.limitOptions[0];
+        this.limitOptions = constants_1.limitOptions;
     }
     ExplorationViewer.prototype.update = function (event) {
         var _this = this;
@@ -44586,6 +44595,7 @@ var ExplorationViewer = (function () {
             templateUrl: './templates/exploration.viewer.html',
             styleUrls: ['./css/exploration.viewer.css'],
             directives: [stock_table_1.StockTable, date_component_1.DateComponent],
+            pipes: [shorten_pipe_1.ShortenPipe],
             providers: [http_1.HTTP_PROVIDERS, data_service_1.DataService, date_service_1.DateService]
         }), 
         __metadata('design:paramtypes', [data_service_1.DataService])
@@ -44594,7 +44604,7 @@ var ExplorationViewer = (function () {
 }());
 exports.ExplorationViewer = ExplorationViewer;
 
-},{"../services/data.service":359,"../services/date.service":360,"./date.component":350,"./stock.table":352,"@angular/core":148,"@angular/http":238}],352:[function(require,module,exports){
+},{"../constants":353,"../pipes/shorten.pipe":358,"../services/data.service":360,"../services/date.service":361,"./date.component":350,"./stock.table":352,"@angular/core":148,"@angular/http":238}],352:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44694,10 +44704,12 @@ var StockTable = (function () {
 }());
 exports.StockTable = StockTable;
 
-},{"../pipes/custom-percent.pipe":355,"../pipes/match.pipe":356,"../pipes/metric.pipe":357,"../pipes/sort.pipe":358,"@angular/core":148}],353:[function(require,module,exports){
+},{"../pipes/custom-percent.pipe":355,"../pipes/match.pipe":356,"../pipes/metric.pipe":357,"../pipes/sort.pipe":359,"@angular/core":148}],353:[function(require,module,exports){
 "use strict";
-var excluded = ['t', 'n'];
+var excluded = ['t', 'n'], limitOptions = [25, 37, 50, 67, 75, 100], start = '2014-01-02';
 exports.excluded = excluded;
+exports.limitOptions = limitOptions;
+exports.start = start;
 
 },{}],354:[function(require,module,exports){
 "use strict";
@@ -44805,6 +44817,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var ShortenPipe = (function () {
+    function ShortenPipe() {
+    }
+    ShortenPipe.prototype.transform = function (limitOptions, upperBound) {
+        return limitOptions.filter(function (option) { return option < upperBound; });
+    };
+    ShortenPipe = __decorate([
+        core_1.Pipe({
+            name: 'shorten',
+            pure: false
+        }), 
+        __metadata('design:paramtypes', [])
+    ], ShortenPipe);
+    return ShortenPipe;
+}());
+exports.ShortenPipe = ShortenPipe;
+
+},{"@angular/core":148}],359:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
 var SortPipe = (function () {
     function SortPipe() {
     }
@@ -44837,7 +44878,7 @@ var SortPipe = (function () {
 }());
 exports.SortPipe = SortPipe;
 
-},{"@angular/core":148}],359:[function(require,module,exports){
+},{"@angular/core":148}],360:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -44901,7 +44942,7 @@ var DataService = (function () {
 }());
 exports.DataService = DataService;
 
-},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":334}],360:[function(require,module,exports){
+},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":334}],361:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
