@@ -29,6 +29,13 @@ import {
 }
 from '../pipes/metric.pipe';
 
+//import QuantileService
+
+import {
+    QuantileService
+}
+from '../services/quantile.service';
+
 @Component({
     selector: 'stock-table',
     templateUrl: './templates/stock.table.html',
@@ -42,7 +49,14 @@ export class StockTable {
     @Input() futureDates
     @Input() limit
     selection = null
-    stockAverages = {};
+    stockAverages = {}
+    metricAverages = {}
+    quartilesDates = {}
+    quartilesStockAvg = []
+    quartilesMetricAvg = []
+    constructor(private _quantileService: QuantileService) {
+
+    }
     set(event, sid) {
         event.preventDefault();
         this.selection = sid;
@@ -57,7 +71,6 @@ export class StockTable {
                 count++;
             }
         }
-
         return sum / count;
     }
     averageByMetric(metaDef) {
@@ -82,7 +95,7 @@ export class StockTable {
             let sum = 0,
                 count = 0;
             for (let stock of stocks) {
-                const avg = this.averageByStock(stock);
+                const avg = this.stockAverages[stock.id];
                 if (!isNaN(avg)) {
                     sum += avg;
                     count++;
@@ -91,16 +104,63 @@ export class StockTable {
             return sum / count;
         }
         else {
+            return null
+        }
+    }
+    colorByQuartile(el, quartiles) {
+        if (isNaN(el)) {
             return null;
+        }
+        else if (el <= quartiles[1]) {
+            return 'red';
+        }
+        else if (el <= quartiles[2]) {
+            return 'yellow';
+        }
+        else if (el <= quartiles[3]) {
+            return 'blue';
+        }
+        else {
+            return 'green';
+        }
+    }
+    colorDates(stock, ymd) {
+        let change = stock.closes.find((date) => date.ymd === ymd).change;
+        const quartiles = this.quartilesDates[ymd];
+        change = (change === 'NA') ? change : parseFloat(change);
+        return this.colorByQuartile(change, quartiles);
+    }
+
+    colorStockAvg(stock) {
+        const id = stock.id,
+            avg = this.stockAverages[id],
+            quartiles = this.quartilesStockAvg;
+        return this.colorByQuartile(avg, quartiles);
+    }
+    colorMetricAvg(metaDef) {
+        const sid = metaDef.sid,
+            avg = this.metricAverages[sid],
+            quartiles = this.quartilesMetricAvg;
+        if (this.selection === metaDef.sid) {
+            return 'highlight';
+        }
+        else {
+            return this.colorByQuartile(avg, quartiles);
         }
     }
 
-
     ngOnChanges(changes) {
-        if (changes.stocks) {
-            for (let stock of this.stocks) {
-                this.stockAverages[stock.id] = this.averageByStock(stock);
-            }
+        this.stockAverages = {};
+        this.metricAverages = {};
+        for (let stock of this.stocks) {
+            this.stockAverages[stock.id] = this.averageByStock(stock);
         }
+        for (let metaDef of this.metaDefs) {
+            this.metricAverages[metaDef.sid] = this.averageByMetric(metaDef);
+        }
+        this.quartilesDates = this._quantileService.quartilesDates(this.stocks, this.futureDates);
+        this.quartilesStockAvg = this._quantileService.quartilesStockAvg(this.stockAverages);
+        this.quartilesMetricAvg = this._quantileService.quartilesMetricAvg(this.metricAverages);
+
     }
 }

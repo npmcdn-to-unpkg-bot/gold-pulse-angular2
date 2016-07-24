@@ -11,3 +11,19 @@ a {
 table thead {
     background-color: #FAF3DD;
 }
+
+.red {
+    background-color: rgb(245, 230, 224);
+}
+
+.yellow {
+    background-color: rgb(234, 227, 161);
+}
+
+.blue {
+    background-color: rgb(140, 175, 206);
+}
+
+.green {
+    background-color: rgb(161, 194, 153);
+}

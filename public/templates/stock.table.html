@@ -8,7 +8,7 @@
         </thead>
         <tbody>
             <tr>
-                <td *ngFor='let metaDef of metaDefs | metric' [class.highlight]='selection === metaDef.sid'>{{averageByMetric(metaDef) | cpercent}}</td>
+                <td *ngFor='let metaDef of metaDefs | metric' [ngClass]='colorMetricAvg(metaDef)'>{{ metricAverages[metaDef.sid] | cpercent}}</td>
             </tr>
         </tbody>
     </table>
@@ -28,8 +28,8 @@
             <tr *ngFor='let stock of stocks | sort: selection | slice:0:limit; let i = index'>
                 <td>{{i + 1}}</td>
                 <td *ngFor='let metaDef of metaDefs' [class.highlight]='selection === metaDef.sid'>{{stock[metaDef.sid]}}</td>
-                <td *ngFor='let ymd of futureDates'>{{stock.closes | match: ymd}}</td>
-                <td *ngIf='futureDates.length'>{{stockAverages[stock.id] | cpercent}}</td>
+                <td *ngFor='let ymd of futureDates' [ngClass]='colorDates(stock, ymd)'>{{stock.closes | match: ymd}}</td>
+                <td *ngIf='futureDates.length' [ngClass]='colorStockAvg(stock)'>{{stockAverages[stock.id] | cpercent}}</td>
             </tr>
         </tbody>
     </table>
