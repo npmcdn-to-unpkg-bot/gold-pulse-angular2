@@ -1,9 +1,16 @@
-<form class='well well-sm'>
+<form>
+    <label>Reference Date</label>
     <input type='text' [placeholder]='currentDate' [(ngModel)]='inputDate.ymd' (ngModelChange)='flag($event)' [class.valid]='inputDate.valid' [class.invalid]='!inputDate.valid' />
-    <label> Dates: {{min}} to {{max}}</label>
+    <label> Range: {{min}} to {{max}}</label>
     <button class='btn btn-primary' (click)='submit()'>Submit</button>
+    <ul class='nav nav-tabs'>
+        <li class="active dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="">Jump trading {{jump}} {{(jump === 1)? 'day': 'days'}}<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li *ngFor='let jumpOption of jumpOptions'><a href="#" (click)='jump = jumpOption'>{{jumpOption}}</a></li>
+            </ul>
+        </li>
+    </ul>
+    <button class='btn' (click)='increment("down")'>-</button>
+    <button class='btn' (click)='increment("up")'>+</button>
 </form>
-<div class='well well-sm'>
-<button class='btn' (click)='increment("down")'>-</button> {{currentDate}}
-<button class='btn' (click)='increment("up")'>+</button>
-</div>

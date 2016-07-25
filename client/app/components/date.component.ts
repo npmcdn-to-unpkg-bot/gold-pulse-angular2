@@ -11,6 +11,13 @@ import {
 }
 from '../services/date.service';
 
+//import constants
+import {
+    jump,
+    jumpOptions
+}
+from '../constants';
+
 @Component({
     selector: 'date-component',
     templateUrl: './templates/date.component.html',
@@ -18,6 +25,8 @@ from '../services/date.service';
 })
 export class DateComponent {
     @Input() currentDate
+    jump = jump
+    jumpOptions = jumpOptions
     validDates = []
     inputDate = {
         'ymd': '',
@@ -62,8 +71,8 @@ export class DateComponent {
     increment(change) {
         const index = this.validDates.indexOf(this.currentDate),
             indexLast = this.validDates.length - 1;
-        if (index > 0 && index < indexLast) {
-            const newIndex = (change === 'up') ? (index + 1) : (index - 1),
+        if (index - this.jump >= 0 && index + this.jump <= indexLast) {
+            const newIndex = (change === 'up') ? (index + this.jump) : (index - this.jump),
                 newCurrentDate = this.validDates[newIndex];
             this.inputDate.ymd = newCurrentDate;
             this.updateCurrentDate.emit(newCurrentDate);

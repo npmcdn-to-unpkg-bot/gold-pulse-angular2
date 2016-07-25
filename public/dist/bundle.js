@@ -60670,9 +60670,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var date_service_1 = require('../services/date.service');
+var constants_1 = require('../constants');
 var DateComponent = (function () {
     function DateComponent(dateService) {
         this.dateService = dateService;
+        this.jump = constants_1.jump;
+        this.jumpOptions = constants_1.jumpOptions;
         this.validDates = [];
         this.inputDate = {
             'ymd': '',
@@ -60711,8 +60714,8 @@ var DateComponent = (function () {
     };
     DateComponent.prototype.increment = function (change) {
         var index = this.validDates.indexOf(this.currentDate), indexLast = this.validDates.length - 1;
-        if (index > 0 && index < indexLast) {
-            var newIndex = (change === 'up') ? (index + 1) : (index - 1), newCurrentDate = this.validDates[newIndex];
+        if (index - this.jump >= 0 && index + this.jump <= indexLast) {
+            var newIndex = (change === 'up') ? (index + this.jump) : (index - this.jump), newCurrentDate = this.validDates[newIndex];
             this.inputDate.ymd = newCurrentDate;
             this.updateCurrentDate.emit(newCurrentDate);
         }
@@ -60739,7 +60742,7 @@ var DateComponent = (function () {
 }());
 exports.DateComponent = DateComponent;
 
-},{"../services/date.service":362,"@angular/core":148}],352:[function(require,module,exports){
+},{"../constants":354,"../services/date.service":362,"@angular/core":148}],352:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -60965,10 +60968,12 @@ exports.StockTable = StockTable;
 
 },{"../pipes/custom-percent.pipe":356,"../pipes/match.pipe":357,"../pipes/metric.pipe":358,"../pipes/sort.pipe":360,"../services/quantile.service":363,"@angular/core":148}],354:[function(require,module,exports){
 "use strict";
-var excluded = ['t', 'n'], limitOptions = [25, 37, 50, 67, 75, 100], start = '2014-01-02';
+var excluded = ['t', 'n'], limitOptions = [25, 37, 50, 67, 75, 100], start = '2014-01-02', jump = 1, jumpOptions = [1, 11, 23, 63];
 exports.excluded = excluded;
 exports.limitOptions = limitOptions;
 exports.start = start;
+exports.jump = jump;
+exports.jumpOptions = jumpOptions;
 
 },{}],355:[function(require,module,exports){
 "use strict";

@@ -1,23 +1,21 @@
-<h1> TSX/TSXv Gold Explorers / Developers</h1>
-<h2>Fundamental Data Exploration Tool</h2>
+<h1> TSX/TSXv Gold Exp/Dev Data Exploration Tool</h1>
 
-<div class='row'>
-  <div class='col-sm-9'>
-    <date-component [currentDate]='currentDate' (updateCurrentDate)='update($event)'>
-    </date-component>
-  </div>
-  <div class='col-sm-3'>
-    <ul class="nav nav-tabs">
-      <li class="active dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="">Limit to: {{limit}} <span class="caret"></span>
+
+<div class="well">
+<date-component [currentDate]='currentDate' (updateCurrentDate)='update($event)'>
+</date-component>
+
+<ul class="nav nav-tabs">
+  <li class="active dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="">Limit to: {{limit}} <span class="caret"></span>
         </a>
-        <ul class="dropdown-menu">
-          <li *ngFor='let option of limitOptions | shorten: stocks.length'><a href="#" (click)='limit = option'>{{option}}</a></li>
-          <li><a href="#" (click)='limit = stocks.length'>{{stocks.length}}</a>
-          </li>
-        </ul>
+    <ul class="dropdown-menu">
+      <li *ngFor='let option of limitOptions | shorten: stocks.length'><a href="#" (click)='limit = option'>{{option}}</a></li>
+      <li><a href="#" (click)='limit = stocks.length'>{{stocks.length}}</a>
       </li>
     </ul>
-  </div>
+  </li>
+</ul>
 </div>
+
 <stock-table [stocks]='stocks' [metaDefs]='metaDefs' [futureDates]='futureDates' [limit]='limit' [currentDate]='currentDate'></stock-table>

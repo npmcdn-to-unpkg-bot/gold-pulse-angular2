@@ -10,9 +10,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var date_service_1 = require('../services/date.service');
+var constants_1 = require('../constants');
 var DateComponent = (function () {
     function DateComponent(dateService) {
         this.dateService = dateService;
+        this.jump = constants_1.jump;
+        this.jumpOptions = constants_1.jumpOptions;
         this.validDates = [];
         this.inputDate = {
             'ymd': '',
@@ -51,8 +54,8 @@ var DateComponent = (function () {
     };
     DateComponent.prototype.increment = function (change) {
         var index = this.validDates.indexOf(this.currentDate), indexLast = this.validDates.length - 1;
-        if (index > 0 && index < indexLast) {
-            var newIndex = (change === 'up') ? (index + 1) : (index - 1), newCurrentDate = this.validDates[newIndex];
+        if (index - this.jump >= 0 && index + this.jump <= indexLast) {
+            var newIndex = (change === 'up') ? (index + this.jump) : (index - this.jump), newCurrentDate = this.validDates[newIndex];
             this.inputDate.ymd = newCurrentDate;
             this.updateCurrentDate.emit(newCurrentDate);
         }
