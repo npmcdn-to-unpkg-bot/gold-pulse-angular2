@@ -104,6 +104,9 @@ var StockTable = (function () {
         if (this.selection === metaDef.sid) {
             return 'highlight';
         }
+        else if (this.limit === this.stocks.length) {
+            return null;
+        }
         else {
             return this.colorByQuartile(avg, quartiles);
         }
@@ -131,6 +134,10 @@ var StockTable = (function () {
         core_1.Input(), 
         __metadata('design:type', Object)
     ], StockTable.prototype, "metaDefs", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], StockTable.prototype, "currentDate", void 0);
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Object)

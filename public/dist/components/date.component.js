@@ -53,6 +53,7 @@ var DateComponent = (function () {
         var index = this.validDates.indexOf(this.currentDate), indexLast = this.validDates.length - 1;
         if (index > 0 && index < indexLast) {
             var newIndex = (change === 'up') ? (index + 1) : (index - 1), newCurrentDate = this.validDates[newIndex];
+            this.inputDate.ymd = newCurrentDate;
             this.updateCurrentDate.emit(newCurrentDate);
         }
     };

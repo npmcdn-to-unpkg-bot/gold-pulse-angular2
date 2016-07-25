@@ -1,6 +1,15 @@
 <div class="container well table-responsive">
     <table class="table table-striped table-condensed">
-        <caption>Average returns by metric for top {{limit}} stocks</caption>
+        <caption>
+            <p>Average returns by metric for top {{limit}} stocks on {{currentDate}}</p>
+            <br>
+            <ul class="legend">
+                <li><span class="q1"></span> Quartile 1</li>
+                <li><span class="q2"></span> Quartile 2</li>
+                <li><span class="q3"></span> Quartile 3</li>
+                <li><span class="q4"></span> Quartile 4</li>
+            </ul>
+        </caption>
         <thead>
             <tr>
                 <td *ngFor='let metaDef of metaDefs | metric' [class.highlight]='selection === metaDef.sid'><a href="" [class.highlight]='selection === metaDef.sid' (click)='set($event, metaDef.sid)'>{{metaDef.short}}</a></td>
@@ -24,8 +33,8 @@
                 <td *ngIf='futureDates.length'>Average</td>
             </tr>
         </thead>
-        <tbody>
-            <tr *ngFor='let stock of stocks | sort: selection | slice:0:limit; let i = index'>
+        <tbody *ngIf='stocks.length'>
+            <tr *ngFor='let stock of stocks | sort: selection:metaDefs| slice:0:limit; let i = index'>
                 <td>{{i + 1}}</td>
                 <td *ngFor='let metaDef of metaDefs' [class.highlight]='selection === metaDef.sid'>{{stock[metaDef.sid]}}</td>
                 <td *ngFor='let ymd of futureDates' [ngClass]='colorDates(stock, ymd)'>{{stock.closes | match: ymd}}</td>

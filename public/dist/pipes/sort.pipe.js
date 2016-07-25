@@ -12,21 +12,23 @@ var core_1 = require('@angular/core');
 var SortPipe = (function () {
     function SortPipe() {
     }
-    SortPipe.prototype.transform = function (stocks, args) {
-        var sid = args, alpha = (sid === 'n' || sid === 't') ? 1 : -1;
-        if (stocks && stocks.length && sid) {
-            stocks.sort(function (s1, s2) {
-                var a = s1[sid], b = s2[sid];
-                if (a < b) {
-                    return -1 * alpha;
-                }
-                else if (a > b) {
-                    return 1 * alpha;
-                }
-                else {
-                    return 0;
-                }
-            });
+    SortPipe.prototype.transform = function (stocks, sid, metaDefs) {
+        if (sid) {
+            var metaDef = metaDefs.find(function (mdef) { return mdef.sid === sid; }), ordinal = metaDef.ordinal ? metaDef.ordinal : false, alpha_1 = (sid === 'n' || sid === 't' || ordinal) ? 1 : -1;
+            if (stocks && stocks.length && sid) {
+                stocks.sort(function (s1, s2) {
+                    var a = s1[sid], b = s2[sid];
+                    if (a < b) {
+                        return -1 * alpha_1;
+                    }
+                    else if (a > b) {
+                        return 1 * alpha_1;
+                    }
+                    else {
+                        return 0;
+                    }
+                });
+            }
         }
         return stocks;
     };

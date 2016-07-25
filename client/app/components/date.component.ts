@@ -65,6 +65,7 @@ export class DateComponent {
         if (index > 0 && index < indexLast) {
             const newIndex = (change === 'up') ? (index + 1) : (index - 1),
                 newCurrentDate = this.validDates[newIndex];
+            this.inputDate.ymd = newCurrentDate;
             this.updateCurrentDate.emit(newCurrentDate);
         }
     }

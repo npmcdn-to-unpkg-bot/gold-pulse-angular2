@@ -46,6 +46,7 @@ from '../services/quantile.service';
 export class StockTable {
     @Input() stocks
     @Input() metaDefs
+    @Input() currentDate
     @Input() futureDates
     @Input() limit
     selection = null
@@ -143,6 +144,9 @@ export class StockTable {
             quartiles = this.quartilesMetricAvg;
         if (this.selection === metaDef.sid) {
             return 'highlight';
+        }
+        else if (this.limit === this.stocks.length) {
+            return null;
         }
         else {
             return this.colorByQuartile(avg, quartiles);

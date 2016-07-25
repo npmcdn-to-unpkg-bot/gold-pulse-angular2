@@ -60713,6 +60713,7 @@ var DateComponent = (function () {
         var index = this.validDates.indexOf(this.currentDate), indexLast = this.validDates.length - 1;
         if (index > 0 && index < indexLast) {
             var newIndex = (change === 'up') ? (index + 1) : (index - 1), newCurrentDate = this.validDates[newIndex];
+            this.inputDate.ymd = newCurrentDate;
             this.updateCurrentDate.emit(newCurrentDate);
         }
     };
@@ -60907,6 +60908,9 @@ var StockTable = (function () {
         if (this.selection === metaDef.sid) {
             return 'highlight';
         }
+        else if (this.limit === this.stocks.length) {
+            return null;
+        }
         else {
             return this.colorByQuartile(avg, quartiles);
         }
@@ -60934,6 +60938,10 @@ var StockTable = (function () {
         core_1.Input(), 
         __metadata('design:type', Object)
     ], StockTable.prototype, "metaDefs", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], StockTable.prototype, "currentDate", void 0);
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Object)
@@ -61100,21 +61108,23 @@ var core_1 = require('@angular/core');
 var SortPipe = (function () {
     function SortPipe() {
     }
-    SortPipe.prototype.transform = function (stocks, args) {
-        var sid = args, alpha = (sid === 'n' || sid === 't') ? 1 : -1;
-        if (stocks && stocks.length && sid) {
-            stocks.sort(function (s1, s2) {
-                var a = s1[sid], b = s2[sid];
-                if (a < b) {
-                    return -1 * alpha;
-                }
-                else if (a > b) {
-                    return 1 * alpha;
-                }
-                else {
-                    return 0;
-                }
-            });
+    SortPipe.prototype.transform = function (stocks, sid, metaDefs) {
+        if (sid) {
+            var metaDef = metaDefs.find(function (mdef) { return mdef.sid === sid; }), ordinal = metaDef.ordinal ? metaDef.ordinal : false, alpha_1 = (sid === 'n' || sid === 't' || ordinal) ? 1 : -1;
+            if (stocks && stocks.length && sid) {
+                stocks.sort(function (s1, s2) {
+                    var a = s1[sid], b = s2[sid];
+                    if (a < b) {
+                        return -1 * alpha_1;
+                    }
+                    else if (a > b) {
+                        return 1 * alpha_1;
+                    }
+                    else {
+                        return 0;
+                    }
+                });
+            }
         }
         return stocks;
     };
