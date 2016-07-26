@@ -14,10 +14,11 @@ var sort_pipe_1 = require('../pipes/sort.pipe');
 var custom_percent_pipe_1 = require('../pipes/custom-percent.pipe');
 var metric_pipe_1 = require('../pipes/metric.pipe');
 var quantile_service_1 = require('../services/quantile.service');
+var constants_1 = require('../constants');
 var StockTable = (function () {
     function StockTable(_quantileService) {
         this._quantileService = _quantileService;
-        this.selection = null;
+        this.selection = constants_1.defaultSelection;
         this.stockAverages = {};
         this.metricAverages = {};
         this.quartilesDates = {};
@@ -112,6 +113,7 @@ var StockTable = (function () {
         }
     };
     StockTable.prototype.ngOnChanges = function (changes) {
+        console.log(changes);
         this.stockAverages = {};
         this.metricAverages = {};
         for (var _i = 0, _a = this.stocks; _i < _a.length; _i++) {
@@ -146,6 +148,10 @@ var StockTable = (function () {
         core_1.Input(), 
         __metadata('design:type', Object)
     ], StockTable.prototype, "limit", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], StockTable.prototype, "spread", void 0);
     StockTable = __decorate([
         core_1.Component({
             selector: 'stock-table',

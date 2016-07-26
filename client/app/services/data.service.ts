@@ -49,4 +49,21 @@ export class DataService {
             return response.json();
         }).map(data => this.processData(data));
     }
+    modifySpread(stocks, futureDates, spread) {
+        for (let stock of stocks) {
+            const close = stock.c,
+                oldCloses = stock.closes;
+            let newCloses = [];
+            for (let ymd of futureDates) {
+                let date = oldCloses.find(date => date.ymd === ymd);
+                if (!isNaN(date.close) && !isNaN(close) && (close + spread) > 0) {
+                    const change = `${((((date.close - spread) - (close + spread))/(close + spread))*100).toFixed(1)}%`;
+                    date.change = change;
+                }
+                newCloses.push(date);
+            }
+            stock.closes = newCloses;
+        }
+        return stocks
+    }
 }

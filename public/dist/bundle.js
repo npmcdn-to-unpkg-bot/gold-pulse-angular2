@@ -60771,17 +60771,22 @@ var ExplorationViewer = (function () {
         this.futureDates = [];
         this.limit = constants_1.limitOptions[0];
         this.limitOptions = constants_1.limitOptions;
+        this.spread = constants_1.spread;
+        this.spreadOptions = constants_1.spreadOptions;
     }
     ExplorationViewer.prototype.update = function (event) {
         var _this = this;
         this.currentDate = event;
-        console.log(event);
         this._dataService.getData(event).subscribe(function (processedData) {
             _this.stocks = processedData[0], _this.metaDefs = processedData[1], _this.futureDates = processedData[2];
             if (_this.limit > _this.stocks.length || _this.limitOptions.indexOf(_this.limit) === -1) {
                 _this.limit = _this.stocks.length;
             }
         });
+    };
+    ExplorationViewer.prototype.modifySpread = function (event) {
+        this.spread = event;
+        this.stocks = this._dataService.modifySpread(this.stocks, this.futureDates, this.spread);
     };
     ExplorationViewer.prototype.ngOnInit = function () {
         var _this = this;
@@ -60821,10 +60826,11 @@ var sort_pipe_1 = require('../pipes/sort.pipe');
 var custom_percent_pipe_1 = require('../pipes/custom-percent.pipe');
 var metric_pipe_1 = require('../pipes/metric.pipe');
 var quantile_service_1 = require('../services/quantile.service');
+var constants_1 = require('../constants');
 var StockTable = (function () {
     function StockTable(_quantileService) {
         this._quantileService = _quantileService;
-        this.selection = null;
+        this.selection = constants_1.defaultSelection;
         this.stockAverages = {};
         this.metricAverages = {};
         this.quartilesDates = {};
@@ -60919,6 +60925,7 @@ var StockTable = (function () {
         }
     };
     StockTable.prototype.ngOnChanges = function (changes) {
+        console.log(changes);
         this.stockAverages = {};
         this.metricAverages = {};
         for (var _i = 0, _a = this.stocks; _i < _a.length; _i++) {
@@ -60953,6 +60960,10 @@ var StockTable = (function () {
         core_1.Input(), 
         __metadata('design:type', Object)
     ], StockTable.prototype, "limit", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], StockTable.prototype, "spread", void 0);
     StockTable = __decorate([
         core_1.Component({
             selector: 'stock-table',
@@ -60966,14 +60977,17 @@ var StockTable = (function () {
 }());
 exports.StockTable = StockTable;
 
-},{"../pipes/custom-percent.pipe":356,"../pipes/match.pipe":357,"../pipes/metric.pipe":358,"../pipes/sort.pipe":360,"../services/quantile.service":363,"@angular/core":148}],354:[function(require,module,exports){
+},{"../constants":354,"../pipes/custom-percent.pipe":356,"../pipes/match.pipe":357,"../pipes/metric.pipe":358,"../pipes/sort.pipe":360,"../services/quantile.service":363,"@angular/core":148}],354:[function(require,module,exports){
 "use strict";
-var excluded = ['t', 'n'], limitOptions = [25, 37, 50, 67, 75, 100], start = '2014-01-02', jump = 1, jumpOptions = [1, 11, 23, 63];
+var excluded = ['t', 'n'], limitOptions = [25, 37, 50, 67, 75, 100], start = '2014-01-02', jump = 1, jumpOptions = [1, 11, 23, 63], spread = 0, spreadOptions = [0, 1 / 8, 1 / 4, 1 / 2, 3 / 4, 1], defaultSelection = 'm1';
 exports.excluded = excluded;
 exports.limitOptions = limitOptions;
 exports.start = start;
 exports.jump = jump;
 exports.jumpOptions = jumpOptions;
+exports.spread = spread;
+exports.spreadOptions = spreadOptions;
+exports.defaultSelection = defaultSelection;
 
 },{}],355:[function(require,module,exports){
 "use strict";
@@ -61198,6 +61212,27 @@ var DataService = (function () {
         return this.http.get("../edp-api-v3a.php?m=" + query).map(function (response) {
             return response.json();
         }).map(function (data) { return _this.processData(data); });
+    };
+    DataService.prototype.modifySpread = function (stocks, futureDates, spread) {
+        for (var _i = 0, stocks_2 = stocks; _i < stocks_2.length; _i++) {
+            var stock = stocks_2[_i];
+            var close_2 = stock.c, oldCloses = stock.closes;
+            var newCloses = [];
+            var _loop_3 = function(ymd) {
+                var date = oldCloses.find(function (date) { return date.ymd === ymd; });
+                if (!isNaN(date.close) && !isNaN(close_2) && (close_2 + spread) > 0) {
+                    var change = ((((date.close - spread) - (close_2 + spread)) / (close_2 + spread)) * 100).toFixed(1) + "%";
+                    date.change = change;
+                }
+                newCloses.push(date);
+            };
+            for (var _a = 0, futureDates_2 = futureDates; _a < futureDates_2.length; _a++) {
+                var ymd = futureDates_2[_a];
+                _loop_3(ymd);
+            }
+            stock.closes = newCloses;
+        }
+        return stocks;
     };
     DataService = __decorate([
         core_1.Injectable(), 

@@ -26,17 +26,22 @@ var ExplorationViewer = (function () {
         this.futureDates = [];
         this.limit = constants_1.limitOptions[0];
         this.limitOptions = constants_1.limitOptions;
+        this.spread = constants_1.spread;
+        this.spreadOptions = constants_1.spreadOptions;
     }
     ExplorationViewer.prototype.update = function (event) {
         var _this = this;
         this.currentDate = event;
-        console.log(event);
         this._dataService.getData(event).subscribe(function (processedData) {
             _this.stocks = processedData[0], _this.metaDefs = processedData[1], _this.futureDates = processedData[2];
             if (_this.limit > _this.stocks.length || _this.limitOptions.indexOf(_this.limit) === -1) {
                 _this.limit = _this.stocks.length;
             }
         });
+    };
+    ExplorationViewer.prototype.modifySpread = function (event) {
+        this.spread = event;
+        this.stocks = this._dataService.modifySpread(this.stocks, this.futureDates, this.spread);
     };
     ExplorationViewer.prototype.ngOnInit = function () {
         var _this = this;

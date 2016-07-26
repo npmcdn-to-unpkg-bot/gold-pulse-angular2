@@ -15,3 +15,8 @@ form {
     text-align: center;
 }
 
+input {
+    border-radius: 10px;
+    padding-left: 2%;
+    width: 110px;
+}

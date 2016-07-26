@@ -52,6 +52,27 @@ var DataService = (function () {
             return response.json();
         }).map(function (data) { return _this.processData(data); });
     };
+    DataService.prototype.modifySpread = function (stocks, futureDates, spread) {
+        for (var _i = 0, stocks_2 = stocks; _i < stocks_2.length; _i++) {
+            var stock = stocks_2[_i];
+            var close_2 = stock.c, oldCloses = stock.closes;
+            var newCloses = [];
+            var _loop_3 = function(ymd) {
+                var date = oldCloses.find(function (date) { return date.ymd === ymd; });
+                if (!isNaN(date.close) && !isNaN(close_2) && (close_2 + spread) > 0) {
+                    var change = ((((date.close - spread) - (close_2 + spread)) / (close_2 + spread)) * 100).toFixed(1) + "%";
+                    date.change = change;
+                }
+                newCloses.push(date);
+            };
+            for (var _a = 0, futureDates_2 = futureDates; _a < futureDates_2.length; _a++) {
+                var ymd = futureDates_2[_a];
+                _loop_3(ymd);
+            }
+            stock.closes = newCloses;
+        }
+        return stocks;
+    };
     DataService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [http_1.Http])

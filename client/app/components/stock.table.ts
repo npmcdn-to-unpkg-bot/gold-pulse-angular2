@@ -36,6 +36,12 @@ import {
 }
 from '../services/quantile.service';
 
+//Initialization constants
+import {
+    defaultSelection
+}
+from '../constants';
+
 @Component({
     selector: 'stock-table',
     templateUrl: './templates/stock.table.html',
@@ -49,7 +55,8 @@ export class StockTable {
     @Input() currentDate
     @Input() futureDates
     @Input() limit
-    selection = null
+    @Input() spread
+    selection = defaultSelection
     stockAverages = {}
     metricAverages = {}
     quartilesDates = {}
@@ -154,6 +161,7 @@ export class StockTable {
     }
 
     ngOnChanges(changes) {
+        console.log(changes);
         this.stockAverages = {};
         this.metricAverages = {};
         for (let stock of this.stocks) {

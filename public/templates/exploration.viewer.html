@@ -2,20 +2,28 @@
 
 
 <div class="well">
-<date-component [currentDate]='currentDate' (updateCurrentDate)='update($event)'>
-</date-component>
+  <date-component [currentDate]='currentDate' (updateCurrentDate)='update($event)'>
+  </date-component>
 
-<ul class="nav nav-tabs">
-  <li class="active dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="">Limit to: {{limit}} <span class="caret"></span>
+  <ul class="nav nav-tabs">
+    <li class="active dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="">Limit to: {{limit}} <span class="caret"></span>
         </a>
-    <ul class="dropdown-menu">
-      <li *ngFor='let option of limitOptions | shorten: stocks.length'><a href="#" (click)='limit = option'>{{option}}</a></li>
-      <li><a href="#" (click)='limit = stocks.length'>{{stocks.length}}</a>
-      </li>
-    </ul>
-  </li>
-</ul>
+      <ul class="dropdown-menu">
+        <li *ngFor='let option of limitOptions | shorten: stocks.length'><a href="#" (click)='limit = option'>{{option}}</a></li>
+        <li><a href="#" (click)='limit = stocks.length'>{{stocks.length}}</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <ul class="nav nav-tabs">
+    <li class="active dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="">Buy/Sell Spread in cents: {{spread}} <span class="caret"></span>
+        </a>
+      <ul class="dropdown-menu">
+        <li *ngFor='let option of spreadOptions'><a href="#" (click)='modifySpread(option)'>{{option}}</a></li>
+      </ul>
+    </li>
+  </ul>
 </div>
-
-<stock-table [stocks]='stocks' [metaDefs]='metaDefs' [futureDates]='futureDates' [limit]='limit' [currentDate]='currentDate'></stock-table>
+<stock-table [stocks]='stocks' [metaDefs]='metaDefs' [futureDates]='futureDates' [limit]='limit' [currentDate]='currentDate' [spread]='spread'></stock-table>

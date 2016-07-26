@@ -10,7 +10,9 @@ from '@angular/http';
 //import constants
 import {
   limitOptions,
-  start
+  start,
+  spread,
+  spreadOptions
 }
 from '../constants';
 
@@ -62,9 +64,10 @@ export class ExplorationViewer {
   futureDates = []
   limit = limitOptions[0]
   limitOptions = limitOptions
+  spread = spread
+  spreadOptions = spreadOptions
   update(event) {
     this.currentDate = event;
-    console.log(event);
     this._dataService.getData(event).subscribe((processedData) => {
       [this.stocks, this.metaDefs, this.futureDates] = processedData;
       if (this.limit > this.stocks.length || this.limitOptions.indexOf(this.limit) === -1) {
@@ -72,10 +75,13 @@ export class ExplorationViewer {
       }
     });
   }
+  modifySpread(event) {
+    this.spread = event;
+    this.stocks = this._dataService.modifySpread(this.stocks, this.futureDates, this.spread);
+  }
   ngOnInit() {
     this._dataService.getData().subscribe((processedData) => {
       [this.stocks, this.metaDefs, this.futureDates] = processedData;
     });
   }
-
 }
