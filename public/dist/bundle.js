@@ -60676,6 +60676,8 @@ var DateComponent = (function () {
         this.dateService = dateService;
         this.jump = constants_1.jump;
         this.jumpOptions = constants_1.jumpOptions;
+        this.gap = constants_1.gap;
+        this.gapOptions = constants_1.gapOptions;
         this.validDates = [];
         this.inputDate = {
             'ymd': '',
@@ -60781,6 +60783,9 @@ var ExplorationViewer = (function () {
             _this.stocks = processedData[0], _this.metaDefs = processedData[1], _this.futureDates = processedData[2];
             if (_this.limit > _this.stocks.length || _this.limitOptions.indexOf(_this.limit) === -1) {
                 _this.limit = _this.stocks.length;
+            }
+            if (_this.spread !== 0) {
+                _this.modifySpread(_this.spread);
             }
         });
     };
@@ -60914,10 +60919,7 @@ var StockTable = (function () {
     };
     StockTable.prototype.colorMetricAvg = function (metaDef) {
         var sid = metaDef.sid, avg = this.metricAverages[sid], quartiles = this.quartilesMetricAvg;
-        if (this.selection === metaDef.sid) {
-            return 'highlight';
-        }
-        else if (this.limit === this.stocks.length) {
+        if (this.limit === this.stocks.length) {
             return null;
         }
         else {
@@ -60979,12 +60981,14 @@ exports.StockTable = StockTable;
 
 },{"../constants":354,"../pipes/custom-percent.pipe":356,"../pipes/match.pipe":357,"../pipes/metric.pipe":358,"../pipes/sort.pipe":360,"../services/quantile.service":363,"@angular/core":148}],354:[function(require,module,exports){
 "use strict";
-var excluded = ['t', 'n'], limitOptions = [25, 37, 50, 67, 75, 100], start = '2014-01-02', jump = 1, jumpOptions = [1, 11, 23, 63], spread = 0, spreadOptions = [0, 1 / 8, 1 / 4, 1 / 2, 3 / 4, 1], defaultSelection = 'm1';
+var excluded = ['t', 'n'], limitOptions = [25, 37, 50, 67, 75, 100], start = '2014-01-02', jump = 1, jumpOptions = [1, 11, 23, 63], gap = 22, gapOptions = [22, 43, 63, 127, 253], spread = 0, spreadOptions = [0, 1 / 8, 1 / 4, 1 / 2, 3 / 4, 1], defaultSelection = 'm1';
 exports.excluded = excluded;
 exports.limitOptions = limitOptions;
 exports.start = start;
 exports.jump = jump;
 exports.jumpOptions = jumpOptions;
+exports.gap = gap;
+exports.gapOptions = gapOptions;
 exports.spread = spread;
 exports.spreadOptions = spreadOptions;
 exports.defaultSelection = defaultSelection;
@@ -61214,14 +61218,16 @@ var DataService = (function () {
         }).map(function (data) { return _this.processData(data); });
     };
     DataService.prototype.modifySpread = function (stocks, futureDates, spread) {
+        var dollarSpread = spread / 100;
         for (var _i = 0, stocks_2 = stocks; _i < stocks_2.length; _i++) {
             var stock = stocks_2[_i];
             var close_2 = stock.c, oldCloses = stock.closes;
             var newCloses = [];
             var _loop_3 = function(ymd) {
                 var date = oldCloses.find(function (date) { return date.ymd === ymd; });
-                if (!isNaN(date.close) && !isNaN(close_2) && (close_2 + spread) > 0) {
-                    var change = ((((date.close - spread) - (close_2 + spread)) / (close_2 + spread)) * 100).toFixed(1) + "%";
+                if (!isNaN(date.close) && !isNaN(close_2) && (close_2 + dollarSpread) > 0) {
+                    var modifiedClose = close_2 + dollarSpread, modifiedFutureClose = Math.max(date.close - dollarSpread, 0);
+                    var change = (((modifiedFutureClose - modifiedClose) / modifiedClose) * 100).toFixed(1) + "%";
                     date.change = change;
                 }
                 newCloses.push(date);

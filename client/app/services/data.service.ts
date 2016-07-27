@@ -50,14 +50,18 @@ export class DataService {
         }).map(data => this.processData(data));
     }
     modifySpread(stocks, futureDates, spread) {
+        const dollarSpread = spread / 100;
+
         for (let stock of stocks) {
             const close = stock.c,
                 oldCloses = stock.closes;
             let newCloses = [];
             for (let ymd of futureDates) {
                 let date = oldCloses.find(date => date.ymd === ymd);
-                if (!isNaN(date.close) && !isNaN(close) && (close + spread) > 0) {
-                    const change = `${((((date.close - spread) - (close + spread))/(close + spread))*100).toFixed(1)}%`;
+                if (!isNaN(date.close) && !isNaN(close) && (close + dollarSpread) > 0) {
+                    const modifiedClose = close + dollarSpread,
+                        modifiedFutureClose = Math.max(date.close - dollarSpread, 0);
+                    const change = `${(((modifiedFutureClose - modifiedClose)/modifiedClose)*100).toFixed(1)}%`;
                     date.change = change;
                 }
                 newCloses.push(date);

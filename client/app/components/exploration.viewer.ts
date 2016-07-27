@@ -73,11 +73,16 @@ export class ExplorationViewer {
       if (this.limit > this.stocks.length || this.limitOptions.indexOf(this.limit) === -1) {
         this.limit = this.stocks.length
       }
+
+      if (this.spread !== 0) {
+        this.modifySpread(this.spread);
+      }
     });
   }
   modifySpread(event) {
     this.spread = event;
     this.stocks = this._dataService.modifySpread(this.stocks, this.futureDates, this.spread);
+
   }
   ngOnInit() {
     this._dataService.getData().subscribe((processedData) => {

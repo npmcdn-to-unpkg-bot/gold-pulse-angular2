@@ -149,10 +149,8 @@ export class StockTable {
         const sid = metaDef.sid,
             avg = this.metricAverages[sid],
             quartiles = this.quartilesMetricAvg;
-        if (this.selection === metaDef.sid) {
-            return 'highlight';
-        }
-        else if (this.limit === this.stocks.length) {
+            
+        if (this.limit === this.stocks.length) {
             return null;
         }
         else {

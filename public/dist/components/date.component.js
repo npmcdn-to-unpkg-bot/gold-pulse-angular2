@@ -16,6 +16,8 @@ var DateComponent = (function () {
         this.dateService = dateService;
         this.jump = constants_1.jump;
         this.jumpOptions = constants_1.jumpOptions;
+        this.gap = constants_1.gap;
+        this.gapOptions = constants_1.gapOptions;
         this.validDates = [];
         this.inputDate = {
             'ymd': '',

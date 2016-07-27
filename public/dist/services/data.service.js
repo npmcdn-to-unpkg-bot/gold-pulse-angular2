@@ -53,14 +53,16 @@ var DataService = (function () {
         }).map(function (data) { return _this.processData(data); });
     };
     DataService.prototype.modifySpread = function (stocks, futureDates, spread) {
+        var dollarSpread = spread / 100;
         for (var _i = 0, stocks_2 = stocks; _i < stocks_2.length; _i++) {
             var stock = stocks_2[_i];
             var close_2 = stock.c, oldCloses = stock.closes;
             var newCloses = [];
             var _loop_3 = function(ymd) {
                 var date = oldCloses.find(function (date) { return date.ymd === ymd; });
-                if (!isNaN(date.close) && !isNaN(close_2) && (close_2 + spread) > 0) {
-                    var change = ((((date.close - spread) - (close_2 + spread)) / (close_2 + spread)) * 100).toFixed(1) + "%";
+                if (!isNaN(date.close) && !isNaN(close_2) && (close_2 + dollarSpread) > 0) {
+                    var modifiedClose = close_2 + dollarSpread, modifiedFutureClose = Math.max(date.close - dollarSpread, 0);
+                    var change = (((modifiedFutureClose - modifiedClose) / modifiedClose) * 100).toFixed(1) + "%";
                     date.change = change;
                 }
                 newCloses.push(date);

@@ -14,7 +14,9 @@ from '../services/date.service';
 //import constants
 import {
     jump,
-    jumpOptions
+    jumpOptions,
+    gap,
+    gapOptions
 }
 from '../constants';
 
@@ -27,6 +29,8 @@ export class DateComponent {
     @Input() currentDate
     jump = jump
     jumpOptions = jumpOptions
+    gap = gap
+    gapOptions = gapOptions
     validDates = []
     inputDate = {
         'ymd': '',

@@ -37,6 +37,9 @@ var ExplorationViewer = (function () {
             if (_this.limit > _this.stocks.length || _this.limitOptions.indexOf(_this.limit) === -1) {
                 _this.limit = _this.stocks.length;
             }
+            if (_this.spread !== 0) {
+                _this.modifySpread(_this.spread);
+            }
         });
     };
     ExplorationViewer.prototype.modifySpread = function (event) {
