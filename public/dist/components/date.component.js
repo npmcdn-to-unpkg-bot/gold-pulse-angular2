@@ -51,7 +51,6 @@ var DateComponent = (function () {
                 var diff1 = Date.parse(curr) - timeStamp, diff2 = Date.parse(acc) - timeStamp;
                 return (diff1 < diff2) ? curr : acc;
             });
-            console.log(closest);
             this.updateYmd(closest);
         }
         else {

@@ -9,6 +9,7 @@ from '@angular/http';
 
 //import constants
 import {
+  limit,
   limitOptions,
   start,
   spread,
@@ -62,7 +63,7 @@ export class ExplorationViewer {
   stocks = []
   metaDefs = []
   futureDates = []
-  limit = limitOptions[0]
+  limit = limit
   limitOptions = limitOptions
   spread = spread
   spreadOptions = spreadOptions

@@ -60711,7 +60711,6 @@ var DateComponent = (function () {
                 var diff1 = Date.parse(curr) - timeStamp, diff2 = Date.parse(acc) - timeStamp;
                 return (diff1 < diff2) ? curr : acc;
             });
-            console.log(closest);
             this.updateYmd(closest);
         }
         else {
@@ -60778,7 +60777,7 @@ var ExplorationViewer = (function () {
         this.stocks = [];
         this.metaDefs = [];
         this.futureDates = [];
-        this.limit = constants_1.limitOptions[0];
+        this.limit = constants_1.limit;
         this.limitOptions = constants_1.limitOptions;
         this.spread = constants_1.spread;
         this.spreadOptions = constants_1.spreadOptions;
@@ -60988,8 +60987,9 @@ exports.StockTable = StockTable;
 
 },{"../constants":354,"../pipes/custom-percent.pipe":356,"../pipes/match.pipe":357,"../pipes/metric.pipe":358,"../pipes/sort.pipe":360,"../services/quantile.service":363,"@angular/core":148}],354:[function(require,module,exports){
 "use strict";
-var excluded = ['t', 'n'], limitOptions = [25, 37, 50, 67, 75, 100], start = '2014-01-02', jump = 1, jumpOptions = [1, 11, 23, 63], gap = 22, gapOptions = [22, 43, 63, 127, 253], spread = 0, spreadOptions = [0, 1 / 8, 1 / 4, 1 / 2, 3 / 4, 1], defaultSelection = 'm1';
+var excluded = ['t', 'n'], limit = 67, limitOptions = [25, 37, 50, 67, 75, 100], start = '2014-01-02', jump = 1, jumpOptions = [1, 10, 11, 23, 63, 127], gap = 22, gapOptions = [22, 43, 63, 127, 253], spread = 1, spreadOptions = [0, 1 / 8, 1 / 4, 1 / 2, 3 / 4, 1], defaultSelection = 'm1';
 exports.excluded = excluded;
+exports.limit = limit;
 exports.limitOptions = limitOptions;
 exports.start = start;
 exports.jump = jump;
@@ -61188,7 +61188,7 @@ var DataService = (function () {
         this.http = http;
     }
     DataService.prototype.processData = function (raw_data) {
-        var dates = raw_data.dates, metaDefs = raw_data.meta_definitions;
+        var dates = raw_data.dates, metaDefs = raw_data.meta_definitions, cpMetaDefs = raw_data.cp_meta_definitions;
         var stocks = dates[0].oids, futureDates = dates.map(function (date) { return date.ymd; });
         futureDates.splice(0, 1);
         metaDefs.splice(0, 1);

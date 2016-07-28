@@ -15,7 +15,8 @@ export class DataService {
 
     processData(raw_data) {
         const dates = raw_data.dates,
-            metaDefs = raw_data.meta_definitions;
+            metaDefs = raw_data.meta_definitions,
+            cpMetaDefs = raw_data.cp_meta_definitions;
         let stocks = dates[0].oids,
             futureDates = dates.map((date) => date.ymd);
         futureDates.splice(0, 1); //remove current date from future_dates
@@ -41,6 +42,20 @@ export class DataService {
             }
             stock.closes = closes;
         }
+
+        /*//aggregate cp data;
+        let cpCloses = ;
+        
+        for (let cp of cpMetaDefs) {
+
+            for (let date of dates) {
+                const cpReturn = date.cp[cp.sid];
+                if (!isNaN(cpReturn)) {
+                    cpCloses.push(cpReturn);
+                }
+            }
+        }*/
+
         return [stocks, metaDefs, futureDates];
     }
 

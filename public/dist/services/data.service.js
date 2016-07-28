@@ -16,7 +16,7 @@ var DataService = (function () {
         this.http = http;
     }
     DataService.prototype.processData = function (raw_data) {
-        var dates = raw_data.dates, metaDefs = raw_data.meta_definitions;
+        var dates = raw_data.dates, metaDefs = raw_data.meta_definitions, cpMetaDefs = raw_data.cp_meta_definitions;
         var stocks = dates[0].oids, futureDates = dates.map(function (date) { return date.ymd; });
         futureDates.splice(0, 1);
         metaDefs.splice(0, 1);
