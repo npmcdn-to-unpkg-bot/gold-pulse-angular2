@@ -4,7 +4,7 @@
     <label> Range: {{min}} to {{max}}</label>
     <button class='btn btn-primary' (click)='submit()'>Submit</button>
 </form>
-<button class='btn' (click)='increment("down")'>-</button>
+<button class='btn' (click)='increment("down")' [disabled]='currentDate === validDates[0]'>-</button>
 <div class='div-inline'>
     <ul class='nav nav-tabs'>
         <li class="active dropdown">
@@ -15,4 +15,4 @@
         </li>
     </ul>
 </div>
-<button class='btn' (click)='increment("up")'>+</button>
+<button class='btn' (click)='increment("up")' [disabled]='currentDate === validDates[validDates.length - 1]'>+</button>

@@ -54,6 +54,10 @@ export class DateComponent {
         const invalid = isNaN(Date.parse(event));
         this.inputDate.valid = !invalid;
     }
+    updateYmd(ymd) {
+        this.inputDate.ymd = ymd;
+        this.updateCurrentDate.emit(this.inputDate.ymd);
+    }
     submit() {
         const timeStamp = Date.parse(this.inputDate.ymd);
         if (!isNaN(timeStamp)) {
@@ -64,8 +68,7 @@ export class DateComponent {
                     return (diff1 < diff2) ? curr : acc;
                 }
             );
-            this.inputDate.ymd = closest;
-            this.updateCurrentDate.emit(this.inputDate.ymd);
+            this.updateYmd(closest);
         }
         else {
             alert('Invalid date!');
@@ -75,11 +78,15 @@ export class DateComponent {
     increment(change) {
         const index = this.validDates.indexOf(this.currentDate),
             indexLast = this.validDates.length - 1;
-        if (index - this.jump >= 0 && index + this.jump <= indexLast) {
+        if ((change === 'up' && (index + this.jump <= indexLast)) || (change === 'down' && (index - this.jump >= 0))) {
+
             const newIndex = (change === 'up') ? (index + this.jump) : (index - this.jump),
                 newCurrentDate = this.validDates[newIndex];
-            this.inputDate.ymd = newCurrentDate;
-            this.updateCurrentDate.emit(newCurrentDate);
+            this.updateYmd(newCurrentDate);
+        }
+        else {
+            const newCurrentDate = (change === 'up') ? this.validDates[indexLast] : this.validDates[0];
+            this.updateYmd(newCurrentDate);
         }
     }
     ngOnChanges() {
