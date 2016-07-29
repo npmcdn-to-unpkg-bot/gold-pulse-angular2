@@ -24,6 +24,8 @@ var ExplorationViewer = (function () {
         this.stocks = [];
         this.metaDefs = [];
         this.futureDates = [];
+        this.cpMetaDefs = [];
+        this.benchmarks = {};
         this.limit = constants_1.limit;
         this.limitOptions = constants_1.limitOptions;
         this.spread = constants_1.spread;
@@ -33,7 +35,7 @@ var ExplorationViewer = (function () {
         var _this = this;
         this.currentDate = event;
         this._dataService.getData(event).subscribe(function (processedData) {
-            _this.stocks = processedData[0], _this.metaDefs = processedData[1], _this.futureDates = processedData[2];
+            _this.stocks = processedData[0], _this.metaDefs = processedData[1], _this.futureDates = processedData[2], _this.cpMetaDefs = processedData[3], _this.benchmarks = processedData[4];
             if (_this.limit > _this.stocks.length || _this.limitOptions.indexOf(_this.limit) === -1) {
                 _this.limit = _this.stocks.length;
             }
@@ -48,8 +50,8 @@ var ExplorationViewer = (function () {
     };
     ExplorationViewer.prototype.ngOnInit = function () {
         var _this = this;
-        this._dataService.getData().subscribe(function (processedData) {
-            _this.stocks = processedData[0], _this.metaDefs = processedData[1], _this.futureDates = processedData[2];
+        this._dataService.getData(this.currentDate).subscribe(function (processedData) {
+            _this.stocks = processedData[0], _this.metaDefs = processedData[1], _this.futureDates = processedData[2], _this.cpMetaDefs = processedData[3], _this.benchmarks = processedData[4];
         });
     };
     ExplorationViewer = __decorate([

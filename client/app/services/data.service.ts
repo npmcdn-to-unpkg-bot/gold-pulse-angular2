@@ -12,8 +12,38 @@ import 'rxjs/add/operator/map';
 
 export class DataService {
     constructor(private http: Http) {}
+    _buildBenchmarks(cpMetaDefs, futureDates, dates) {
+        //helper function for building average returns for each benchmark
 
-    processData(raw_data) {
+        //start building benchmarks with prices on current date
+        let benchmarks = dates[0].cp;
+        for (let cpMetaDef of cpMetaDefs) {
+            const close = benchmarks[cpMetaDef.sid];
+
+            //Only compute average returns if price on current date is available
+            if (!isNaN(close) && close > 0) {
+
+                //An array to store the future closes
+                let futureCloses = [];
+                for (let ymd of futureDates) {
+                    const cp = dates.find(date => date.ymd === ymd).cp,
+                        futureClose = cp[cpMetaDef.sid];
+
+                    if (!isNaN(futureClose)) {
+                        futureCloses.push(futureClose);
+                    }
+                }
+                //Future Returns from Future closes
+                const futureReturns = futureCloses.map(fclose => (fclose - close) / close),
+                    avg = futureReturns.reduce((sum, cur) => sum + cur, 0) / futureReturns.length,
+                    formattedAvg = (avg * 100).toFixed(1);
+                benchmarks[cpMetaDef.sid] = `${formattedAvg}%`;
+            }
+        }
+
+        return benchmarks;
+    }
+    _processData(raw_data) {
         const dates = raw_data.dates,
             metaDefs = raw_data.meta_definitions,
             cpMetaDefs = raw_data.cp_meta_definitions;
@@ -43,26 +73,17 @@ export class DataService {
             stock.closes = closes;
         }
 
-        /*//aggregate cp data;
-        let cpCloses = ;
-        
-        for (let cp of cpMetaDefs) {
+        //Build benchmark averages from cp data;
+        let benchmarks = this._buildBenchmarks(cpMetaDefs, futureDates, dates);
 
-            for (let date of dates) {
-                const cpReturn = date.cp[cp.sid];
-                if (!isNaN(cpReturn)) {
-                    cpCloses.push(cpReturn);
-                }
-            }
-        }*/
 
-        return [stocks, metaDefs, futureDates];
+        return [stocks, metaDefs, futureDates, cpMetaDefs, benchmarks];
     }
 
     getData(query = '') {
         return this.http.get(`../edp-api-v3a.php?m=${query}`).map(response => {
             return response.json();
-        }).map(data => this.processData(data));
+        }).map(data => this._processData(data));
     }
     modifySpread(stocks, futureDates, spread) {
         const dollarSpread = spread / 100;

@@ -63,6 +63,8 @@ export class ExplorationViewer {
   stocks = []
   metaDefs = []
   futureDates = []
+  cpMetaDefs = []
+  benchmarks = {}
   limit = limit
   limitOptions = limitOptions
   spread = spread
@@ -70,7 +72,7 @@ export class ExplorationViewer {
   update(event) {
     this.currentDate = event;
     this._dataService.getData(event).subscribe((processedData) => {
-      [this.stocks, this.metaDefs, this.futureDates] = processedData;
+      [this.stocks, this.metaDefs, this.futureDates, this.cpMetaDefs, this.benchmarks] = processedData;
       if (this.limit > this.stocks.length || this.limitOptions.indexOf(this.limit) === -1) {
         this.limit = this.stocks.length
       }
@@ -86,8 +88,8 @@ export class ExplorationViewer {
 
   }
   ngOnInit() {
-    this._dataService.getData().subscribe((processedData) => {
-      [this.stocks, this.metaDefs, this.futureDates] = processedData;
+    this._dataService.getData(this.currentDate).subscribe((processedData) => {
+      [this.stocks, this.metaDefs, this.futureDates, this.cpMetaDefs, this.benchmarks] = processedData;
     });
   }
 }

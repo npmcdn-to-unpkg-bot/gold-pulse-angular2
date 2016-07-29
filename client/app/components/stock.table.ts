@@ -54,6 +54,8 @@ export class StockTable {
     @Input() metaDefs
     @Input() currentDate
     @Input() futureDates
+    @Input() cpMetaDefs
+    @Input() benchmarks
     @Input() limit
     @Input() spread
     selection = defaultSelection

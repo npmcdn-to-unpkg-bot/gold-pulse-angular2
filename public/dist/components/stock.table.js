@@ -144,6 +144,14 @@ var StockTable = (function () {
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Object)
+    ], StockTable.prototype, "cpMetaDefs", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], StockTable.prototype, "benchmarks", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
     ], StockTable.prototype, "limit", void 0);
     __decorate([
         core_1.Input(), 
