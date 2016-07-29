@@ -75,7 +75,9 @@ table caption {
 .div-inline {
     display: inline-block;
 }
-.div-inline a.dropdown {
-    border: none;
+
+.div-inline .dropdown-toggle {
+    position: relative;
+    top: 15px;
 }
 
