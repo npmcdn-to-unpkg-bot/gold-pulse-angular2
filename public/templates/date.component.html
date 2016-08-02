@@ -1,7 +1,9 @@
 <form>
-    <label>Reference Date</label>
-    <input type='text' placeholder='yyyy-mm-dd' [(ngModel)]='inputDate.ymd' (ngModelChange)='flag($event)' [class.valid]='inputDate.valid' [class.invalid]='!inputDate.valid' />
-    <label> Range: {{min}} to {{max}}</label>
+    <label>Set reference date</label>
+    <span class='span-inline'>
+    <label for='date-input'><small>{{min}} to {{max}}</small></label>
+    <input type='text' id='date-input' placeholder='yyyy-mm-dd' [(ngModel)]='inputDate.ymd' (ngModelChange)='flag($event)' [class.valid]='inputDate.valid' [class.invalid]='!inputDate.valid' />
+    </span>
     <button class='btn' (click)='increment("down")' [disabled]='currentDate === validDates[0]'>-</button>
     <div class='div-inline'>
         <ul class='nav nav-tabs'>

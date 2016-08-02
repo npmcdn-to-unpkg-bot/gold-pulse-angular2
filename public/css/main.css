@@ -81,3 +81,10 @@ table caption {
     top: 15px;
 }
 
+.span-inline {
+    display: inline-block;
+}
+.span-inline label {
+    display: block;
+    font-weight: normal;
+}

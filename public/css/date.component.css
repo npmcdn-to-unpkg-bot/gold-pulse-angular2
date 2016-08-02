@@ -7,7 +7,7 @@
 }
 
 .valid {
-    border-color: #78FA89;
+    border-color: #509558;
 }
 
 form {
@@ -16,7 +16,6 @@ form {
 }
 
 input {
-    border-radius: 10px;
-    padding-left: 1.2%;
-    width: 110px;
+    text-align: center;
+    width: 75%;
 }
