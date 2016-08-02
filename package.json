@@ -1,6 +1,6 @@
 {
   "name": "gold-pulse",
-  "version": "1.7.4",
+  "version": "1.7.5",
   "description": "Gold Pulse with angular 2",
   "main": "server.js",
   "scripts": {
