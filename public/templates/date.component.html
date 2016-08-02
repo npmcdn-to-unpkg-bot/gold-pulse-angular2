@@ -1,18 +1,18 @@
 <form>
     <label>Reference Date</label>
-    <input type='text' [placeholder]='currentDate' [(ngModel)]='inputDate.ymd' (ngModelChange)='flag($event)' [class.valid]='inputDate.valid' [class.invalid]='!inputDate.valid' />
+    <input type='text' placeholder='yyyy-mm-dd' [(ngModel)]='inputDate.ymd' (ngModelChange)='flag($event)' [class.valid]='inputDate.valid' [class.invalid]='!inputDate.valid' />
     <label> Range: {{min}} to {{max}}</label>
+    <button class='btn' (click)='increment("down")' [disabled]='currentDate === validDates[0]'>-</button>
+    <div class='div-inline'>
+        <ul class='nav nav-tabs'>
+            <li class="active dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="">Jump trading {{jump}} {{(jump === 1)? 'day': 'days'}}<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li *ngFor='let jumpOption of jumpOptions'><a href="#" (click)='jump = jumpOption'>{{jumpOption}}</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <button class='btn' (click)='increment("up")' [disabled]='currentDate === validDates[validDates.length - 1]'>+</button>
     <button class='btn btn-primary' (click)='submit()'>Submit</button>
 </form>
-<button class='btn' (click)='increment("down")' [disabled]='currentDate === validDates[0]'>-</button>
-<div class='div-inline'>
-    <ul class='nav nav-tabs'>
-        <li class="active dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="">Jump trading {{jump}} {{(jump === 1)? 'day': 'days'}}<span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li *ngFor='let jumpOption of jumpOptions'><a href="#" (click)='jump = jumpOption'>{{jumpOption}}</a></li>
-            </ul>
-        </li>
-    </ul>
-</div>
-<button class='btn' (click)='increment("up")' [disabled]='currentDate === validDates[validDates.length - 1]'>+</button>

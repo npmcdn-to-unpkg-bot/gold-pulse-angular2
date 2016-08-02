@@ -2,8 +2,14 @@
 
 
 <div class="well">
-  <date-component [currentDate]='currentDate' (updateCurrentDate)='update($event)'>
-  </date-component>
+  <div class="row">
+    <div class="col-sm-12">
+      <date-component [currentDate]='currentDate' (updateCurrentDate)='update($event)'>
+      </date-component>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
   <div class="div-inline">
     <ul class="nav nav-tabs">
       <li class="active dropdown">
@@ -27,6 +33,8 @@
         </ul>
       </li>
     </ul>
+  </div>
+  </div>
   </div>
 </div>
 
