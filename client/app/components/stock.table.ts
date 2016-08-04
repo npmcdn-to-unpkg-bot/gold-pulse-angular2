@@ -86,6 +86,10 @@ export class StockTable {
     averageByMetric(metaDef) {
         const sid = metaDef.sid;
         let stocks = this.stocks;
+        //Reality check to ensure at least one stock has a value for the metric
+        if (stocks.filter(stock => stock[sid] === undefined).length === stocks.length) {
+            return null;
+        }
         if (sid !== 'n' && sid !== 't') {
             stocks.sort((s1, s2) => {
                 const a = s1[sid],
@@ -101,6 +105,7 @@ export class StockTable {
                     return 0;
                 }
             });
+
             stocks = stocks.slice(0, this.limit);
             let sum = 0,
                 count = 0;
@@ -152,7 +157,7 @@ export class StockTable {
             avg = this.metricAverages[sid],
             quartiles = this.quartilesMetricAvg;
 
-        if (this.limit === this.stocks.length) {
+        if (this.limit === this.stocks.length || avg === null) {
             return null;
         }
         else {
@@ -161,7 +166,6 @@ export class StockTable {
     }
 
     ngOnChanges(changes) {
-        console.log(changes);
         this.stockAverages = {};
         this.metricAverages = {};
         for (let stock of this.stocks) {

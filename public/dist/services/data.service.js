@@ -32,7 +32,7 @@ var DataService = (function () {
                     _loop_2(ymd);
                 }
                 var futureReturns = futureCloses.map(function (fclose) { return (fclose - close_1) / close_1; }), avg = futureReturns.reduce(function (sum, cur) { return sum + cur; }, 0) / futureReturns.length, formattedAvg = (avg * 100).toFixed(1);
-                benchmarks[cpMetaDef.sid] = formattedAvg + "%";
+                benchmarks[cpMetaDef.sid] = isNaN(parseFloat(formattedAvg)) ? null : formattedAvg + "%";
             }
         };
         for (var _a = 0, cpMetaDefs_1 = cpMetaDefs; _a < cpMetaDefs_1.length; _a++) {
@@ -46,6 +46,7 @@ var DataService = (function () {
         var stocks = dates[0].oids, futureDates = dates.map(function (date) { return date.ymd; });
         futureDates.splice(0, 1);
         metaDefs.splice(0, 1);
+        console.log(futureDates);
         var _loop_3 = function(stock) {
             var id = stock.id, close_2 = stock.c;
             var closes = [];

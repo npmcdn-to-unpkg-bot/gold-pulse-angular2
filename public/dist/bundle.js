@@ -60869,6 +60869,9 @@ var StockTable = (function () {
     StockTable.prototype.averageByMetric = function (metaDef) {
         var sid = metaDef.sid;
         var stocks = this.stocks;
+        if (stocks.filter(function (stock) { return stock[sid] === undefined; }).length === stocks.length) {
+            return null;
+        }
         if (sid !== 'n' && sid !== 't') {
             stocks.sort(function (s1, s2) {
                 var a = s1[sid], b = s2[sid];
@@ -60927,7 +60930,7 @@ var StockTable = (function () {
     };
     StockTable.prototype.colorMetricAvg = function (metaDef) {
         var sid = metaDef.sid, avg = this.metricAverages[sid], quartiles = this.quartilesMetricAvg;
-        if (this.limit === this.stocks.length) {
+        if (this.limit === this.stocks.length || avg === null) {
             return null;
         }
         else {
@@ -60935,7 +60938,6 @@ var StockTable = (function () {
         }
     };
     StockTable.prototype.ngOnChanges = function (changes) {
-        console.log(changes);
         this.stockAverages = {};
         this.metricAverages = {};
         for (var _i = 0, _a = this.stocks; _i < _a.length; _i++) {
@@ -60997,7 +60999,7 @@ exports.StockTable = StockTable;
 
 },{"../constants":354,"../pipes/custom-percent.pipe":356,"../pipes/match.pipe":357,"../pipes/metric.pipe":358,"../pipes/sort.pipe":360,"../services/quantile.service":363,"@angular/core":148}],354:[function(require,module,exports){
 "use strict";
-var excluded = ['t', 'n'], limit = 67, limitOptions = [25, 37, 50, 67, 75, 100], start = '2015-10-13', jump = 1, jumpOptions = [1, 10, 11, 23, 63, 127], gap = 22, gapOptions = [22, 43, 63, 127, 253], spread = 1, spreadOptions = [0, 1 / 8, 1 / 4, 1 / 2, 3 / 4, 1], defaultSelection = 'm1';
+var excluded = ['t', 'n'], limit = 67, limitOptions = [25, 37, 50, 67, 75, 100], start = '2015-10-13', jump = 1, jumpOptions = [1, 10, 11, 23, 63, 127], gap = 22, gapOptions = [22, 43, 63, 127, 253], spread = 1, spreadOptions = [0, 1 / 8, 1 / 4, 1 / 2, 3 / 4, 1], defaultSelection = null;
 exports.excluded = excluded;
 exports.limit = limit;
 exports.limitOptions = limitOptions;
@@ -61214,7 +61216,7 @@ var DataService = (function () {
                     _loop_2(ymd);
                 }
                 var futureReturns = futureCloses.map(function (fclose) { return (fclose - close_1) / close_1; }), avg = futureReturns.reduce(function (sum, cur) { return sum + cur; }, 0) / futureReturns.length, formattedAvg = (avg * 100).toFixed(1);
-                benchmarks[cpMetaDef.sid] = formattedAvg + "%";
+                benchmarks[cpMetaDef.sid] = isNaN(parseFloat(formattedAvg)) ? null : formattedAvg + "%";
             }
         };
         for (var _a = 0, cpMetaDefs_1 = cpMetaDefs; _a < cpMetaDefs_1.length; _a++) {
@@ -61228,6 +61230,7 @@ var DataService = (function () {
         var stocks = dates[0].oids, futureDates = dates.map(function (date) { return date.ymd; });
         futureDates.splice(0, 1);
         metaDefs.splice(0, 1);
+        console.log(futureDates);
         var _loop_3 = function(stock) {
             var id = stock.id, close_2 = stock.c;
             var closes = [];

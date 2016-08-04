@@ -37,7 +37,7 @@ export class DataService {
                 const futureReturns = futureCloses.map(fclose => (fclose - close) / close),
                     avg = futureReturns.reduce((sum, cur) => sum + cur, 0) / futureReturns.length,
                     formattedAvg = (avg * 100).toFixed(1);
-                benchmarks[cpMetaDef.sid] = `${formattedAvg}%`;
+                benchmarks[cpMetaDef.sid] = isNaN(parseFloat(formattedAvg)) ? null : `${formattedAvg}%`;
             }
         }
 
@@ -51,7 +51,7 @@ export class DataService {
             futureDates = dates.map((date) => date.ymd);
         futureDates.splice(0, 1); //remove current date from future_dates
         metaDefs.splice(0, 1); //remove id from metaDefs
-
+        console.log(futureDates);
         //add closing prices for the future dates;
         for (let stock of stocks) {
             const id = stock.id,

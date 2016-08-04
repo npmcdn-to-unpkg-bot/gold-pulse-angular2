@@ -44,6 +44,9 @@ var StockTable = (function () {
     StockTable.prototype.averageByMetric = function (metaDef) {
         var sid = metaDef.sid;
         var stocks = this.stocks;
+        if (stocks.filter(function (stock) { return stock[sid] === undefined; }).length === stocks.length) {
+            return null;
+        }
         if (sid !== 'n' && sid !== 't') {
             stocks.sort(function (s1, s2) {
                 var a = s1[sid], b = s2[sid];
@@ -102,7 +105,7 @@ var StockTable = (function () {
     };
     StockTable.prototype.colorMetricAvg = function (metaDef) {
         var sid = metaDef.sid, avg = this.metricAverages[sid], quartiles = this.quartilesMetricAvg;
-        if (this.limit === this.stocks.length) {
+        if (this.limit === this.stocks.length || avg === null) {
             return null;
         }
         else {
@@ -110,7 +113,6 @@ var StockTable = (function () {
         }
     };
     StockTable.prototype.ngOnChanges = function (changes) {
-        console.log(changes);
         this.stockAverages = {};
         this.metricAverages = {};
         for (var _i = 0, _a = this.stocks; _i < _a.length; _i++) {

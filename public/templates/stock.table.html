@@ -16,7 +16,7 @@
                 <td> Limit</td>
                 <td> Spread</td>
                 <td *ngFor='let metaDef of metaDefs | metric' [class.highlight]='selection === metaDef.sid'><a href="" [class.highlight]='selection === metaDef.sid' (click)='set($event, metaDef.sid)'>{{metaDef.short}}</a></td>
-                <td *ngFor='let cpMetaDef of cpMetaDefs'>{{cpMetaDef.sid}}</td>
+                <td *ngFor='let cpMetaDef of cpMetaDefs'>{{cpMetaDef.short}}</td>
             </tr>
         </thead>
         <tbody>

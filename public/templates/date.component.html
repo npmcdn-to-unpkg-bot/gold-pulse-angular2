@@ -1,9 +1,10 @@
 <form>
-    <label>Set reference date</label>
+    <label>Set new reference date</label>
     <span class='span-inline'>
     <label for='date-input'><small>{{min}} to {{max}}</small></label>
     <input type='text' id='date-input' placeholder='yyyy-mm-dd' [(ngModel)]='inputDate.ymd' (ngModelChange)='flag($event)' [class.valid]='inputDate.valid' [class.invalid]='!inputDate.valid' />
     </span>
+    <button class='btn btn-primary' (click)='submit()'>Submit</button>
     <button class='btn' (click)='increment("down")' [disabled]='currentDate === validDates[0]'>-</button>
     <div class='div-inline'>
         <ul class='nav nav-tabs'>
@@ -16,5 +17,4 @@
         </ul>
     </div>
     <button class='btn' (click)='increment("up")' [disabled]='currentDate === validDates[validDates.length - 1]'>+</button>
-    <button class='btn btn-primary' (click)='submit()'>Submit</button>
 </form>

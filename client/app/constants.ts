@@ -8,7 +8,7 @@ const excluded = ['t', 'n'],
     gapOptions = [22, 43, 63, 127, 253],
     spread = 1,
     spreadOptions = [0, 1 / 8, 1 / 4, 1 / 2, 3 / 4, 1],
-    defaultSelection = 'm1';
+    defaultSelection = null;
 
 export {
     excluded,
