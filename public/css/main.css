@@ -3,6 +3,12 @@ body {
     font-family: Verdana, sans-serif;
 }
 
+h1 {
+    background-color: #FAF3DD;
+    width: 75%;
+    margin: 0 auto;
+}
+
 .highlight {
     background-color: white;
     color: black;
@@ -88,8 +94,8 @@ table caption {
 .span-inline {
     display: inline-block;
 }
+
 .span-inline label {
     display: block;
     font-weight: normal;
 }
-

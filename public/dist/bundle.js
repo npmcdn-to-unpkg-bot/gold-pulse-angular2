@@ -60750,7 +60750,7 @@ var DateComponent = (function () {
 }());
 exports.DateComponent = DateComponent;
 
-},{"../constants":354,"../services/date.service":362,"@angular/core":148}],352:[function(require,module,exports){
+},{"../constants":354,"../services/date.service":363,"@angular/core":148}],352:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -60822,7 +60822,7 @@ var ExplorationViewer = (function () {
 }());
 exports.ExplorationViewer = ExplorationViewer;
 
-},{"../constants":354,"../pipes/shorten.pipe":359,"../services/data.service":361,"../services/date.service":362,"../services/quantile.service":363,"./date.component":351,"./stock.table":353,"@angular/core":148,"@angular/http":238}],353:[function(require,module,exports){
+},{"../constants":354,"../pipes/shorten.pipe":360,"../services/data.service":362,"../services/date.service":363,"../services/quantile.service":364,"./date.component":351,"./stock.table":353,"@angular/core":148,"@angular/http":238}],353:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -60837,6 +60837,7 @@ var core_1 = require('@angular/core');
 var match_pipe_1 = require('../pipes/match.pipe');
 var sort_pipe_1 = require('../pipes/sort.pipe');
 var custom_percent_pipe_1 = require('../pipes/custom-percent.pipe');
+var format_pipe_1 = require('../pipes/format.pipe');
 var metric_pipe_1 = require('../pipes/metric.pipe');
 var quantile_service_1 = require('../services/quantile.service');
 var constants_1 = require('../constants');
@@ -60990,7 +60991,7 @@ var StockTable = (function () {
             selector: 'stock-table',
             templateUrl: './templates/stock.table.html',
             styleUrls: ['./css/stock.table.css'],
-            pipes: [match_pipe_1.MatchPipe, sort_pipe_1.SortPipe, custom_percent_pipe_1.CustomPercentPipe, metric_pipe_1.MetricPipe]
+            pipes: [match_pipe_1.MatchPipe, sort_pipe_1.SortPipe, custom_percent_pipe_1.CustomPercentPipe, metric_pipe_1.MetricPipe, format_pipe_1.FormatPipe]
         }), 
         __metadata('design:paramtypes', [quantile_service_1.QuantileService])
     ], StockTable);
@@ -60998,7 +60999,7 @@ var StockTable = (function () {
 }());
 exports.StockTable = StockTable;
 
-},{"../constants":354,"../pipes/custom-percent.pipe":356,"../pipes/match.pipe":357,"../pipes/metric.pipe":358,"../pipes/sort.pipe":360,"../services/quantile.service":363,"@angular/core":148}],354:[function(require,module,exports){
+},{"../constants":354,"../pipes/custom-percent.pipe":356,"../pipes/format.pipe":357,"../pipes/match.pipe":358,"../pipes/metric.pipe":359,"../pipes/sort.pipe":361,"../services/quantile.service":364,"@angular/core":148}],354:[function(require,module,exports){
 "use strict";
 var excluded = ['t', 'n'], limit = 67, limitOptions = [25, 37, 50, 67, 75, 100], start = '2015-10-13', jump = 1, jumpOptions = [1, 10, 11, 23, 63, 127], gap = 22, gapOptions = [22, 43, 63, 127, 253], spread = 1, spreadOptions = [0, 1 / 8, 1 / 4, 1 / 2, 3 / 4, 1], defaultSelection = null;
 exports.excluded = excluded;
@@ -61061,6 +61062,37 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var FormatPipe = (function () {
+    function FormatPipe() {
+    }
+    FormatPipe.prototype.transform = function (value, ordinal) {
+        if (!isNaN(value) && !ordinal) {
+            return value.toFixed(2);
+        }
+        return value;
+    };
+    FormatPipe = __decorate([
+        core_1.Pipe({
+            name: 'format'
+        }), 
+        __metadata('design:paramtypes', [])
+    ], FormatPipe);
+    return FormatPipe;
+}());
+exports.FormatPipe = FormatPipe;
+
+},{"@angular/core":148}],358:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
 var MatchPipe = (function () {
     function MatchPipe() {
     }
@@ -61078,7 +61110,7 @@ var MatchPipe = (function () {
 }());
 exports.MatchPipe = MatchPipe;
 
-},{"@angular/core":148}],358:[function(require,module,exports){
+},{"@angular/core":148}],359:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -61107,7 +61139,7 @@ var MetricPipe = (function () {
 }());
 exports.MetricPipe = MetricPipe;
 
-},{"../constants":354,"@angular/core":148}],359:[function(require,module,exports){
+},{"../constants":354,"@angular/core":148}],360:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -61136,7 +61168,7 @@ var ShortenPipe = (function () {
 }());
 exports.ShortenPipe = ShortenPipe;
 
-},{"@angular/core":148}],360:[function(require,module,exports){
+},{"@angular/core":148}],361:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -61182,7 +61214,7 @@ var SortPipe = (function () {
 }());
 exports.SortPipe = SortPipe;
 
-},{"@angular/core":148}],361:[function(require,module,exports){
+},{"@angular/core":148}],362:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -61296,7 +61328,7 @@ var DataService = (function () {
 }());
 exports.DataService = DataService;
 
-},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":335}],362:[function(require,module,exports){
+},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":335}],363:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -61327,7 +61359,7 @@ var DateService = (function () {
 }());
 exports.DateService = DateService;
 
-},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":335}],363:[function(require,module,exports){
+},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":335}],364:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

@@ -12,10 +12,16 @@
 
 form {
     display: inline-block;
-    text-align: center;
+    text-align: left;
+    width: 100%;
 }
 
 input {
     text-align: center;
-    width: 75%;
+    width: 90%;
+}
+
+.btn-primary {
+    margin-right: 2%;
+    margin-left: -1%;
 }

@@ -12,6 +12,7 @@ var core_1 = require('@angular/core');
 var match_pipe_1 = require('../pipes/match.pipe');
 var sort_pipe_1 = require('../pipes/sort.pipe');
 var custom_percent_pipe_1 = require('../pipes/custom-percent.pipe');
+var format_pipe_1 = require('../pipes/format.pipe');
 var metric_pipe_1 = require('../pipes/metric.pipe');
 var quantile_service_1 = require('../services/quantile.service');
 var constants_1 = require('../constants');
@@ -165,7 +166,7 @@ var StockTable = (function () {
             selector: 'stock-table',
             templateUrl: './templates/stock.table.html',
             styleUrls: ['./css/stock.table.css'],
-            pipes: [match_pipe_1.MatchPipe, sort_pipe_1.SortPipe, custom_percent_pipe_1.CustomPercentPipe, metric_pipe_1.MetricPipe]
+            pipes: [match_pipe_1.MatchPipe, sort_pipe_1.SortPipe, custom_percent_pipe_1.CustomPercentPipe, metric_pipe_1.MetricPipe, format_pipe_1.FormatPipe]
         }), 
         __metadata('design:paramtypes', [quantile_service_1.QuantileService])
     ], StockTable);

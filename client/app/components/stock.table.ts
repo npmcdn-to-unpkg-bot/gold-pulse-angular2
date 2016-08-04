@@ -16,12 +16,15 @@ import {
 }
 from '../pipes/sort.pipe';
 
-//import PercentPipe, which formats decimal data
+//import PercentPipe, which formats percent data
 
 import {
     CustomPercentPipe
 }
 from '../pipes/custom-percent.pipe';
+
+// import FormatPipe, which formats decimal data
+import { FormatPipe} from '../pipes/format.pipe';
 
 //import MetricPipe, which returns the metadefinitons that are metrics
 import {
@@ -46,7 +49,7 @@ from '../constants';
     selector: 'stock-table',
     templateUrl: './templates/stock.table.html',
     styleUrls: ['./css/stock.table.css'],
-    pipes: [MatchPipe, SortPipe, CustomPercentPipe, MetricPipe]
+    pipes: [MatchPipe, SortPipe, CustomPercentPipe, MetricPipe, FormatPipe]
 })
 
 export class StockTable {
