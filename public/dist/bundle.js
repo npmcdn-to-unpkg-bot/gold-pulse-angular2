@@ -60873,13 +60873,14 @@ var StockTable = (function () {
             return null;
         }
         if (sid !== 'n' && sid !== 't') {
+            var alpha_1 = metaDef.ordinal ? 1 : -1;
             stocks.sort(function (s1, s2) {
                 var a = s1[sid], b = s2[sid];
                 if (a < b) {
-                    return 1;
+                    return -1 * alpha_1;
                 }
                 else if (a > b) {
-                    return -1;
+                    return alpha_1;
                 }
                 else {
                     return 0;

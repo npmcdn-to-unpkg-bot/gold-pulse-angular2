@@ -91,15 +91,17 @@ export class StockTable {
             return null;
         }
         if (sid !== 'n' && sid !== 't') {
+            const alpha = metaDef.ordinal ? 1 : -1;
+
             stocks.sort((s1, s2) => {
                 const a = s1[sid],
                     b = s2[sid];
 
                 if (a < b) {
-                    return 1;
+                    return -1*alpha;
                 }
                 else if (a > b) {
-                    return -1;
+                    return alpha;
                 }
                 else {
                     return 0;

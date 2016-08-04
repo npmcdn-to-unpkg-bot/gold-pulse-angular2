@@ -38,6 +38,10 @@ table caption {
     text-align: center;
 }
 
+.table-right {
+    text-align: right;
+}
+
 .legend {
     list-style: none;
     display: inline-block;
