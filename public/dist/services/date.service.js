@@ -16,9 +16,7 @@ var DateService = (function () {
         this.http = http;
     }
     DateService.prototype.getValidDates = function () {
-        return this.http.get('../valid-dates-api.php').map(function (response) {
-            return response.json();
-        });
+        return this.http.get('../valid-dates-api.php').map(function (response) { return response.json(); });
     };
     DateService = __decorate([
         core_1.Injectable(), 

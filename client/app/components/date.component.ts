@@ -13,6 +13,7 @@ from '../services/date.service';
 
 //import constants
 import {
+    hpOptions,
     jump,
     jumpOptions,
     gap,
@@ -27,6 +28,8 @@ from '../constants';
 })
 export class DateComponent {
     @Input() currentDate
+    @Input() hp
+    hpOptions = hpOptions
     jump = jump
     jumpOptions = jumpOptions
     gap = gap
@@ -37,6 +40,7 @@ export class DateComponent {
         'valid': true
     }
     @Output() updateCurrentDate = new EventEmitter()
+    @Output() updateHp = new EventEmitter()
     min
     max
     constructor(private dateService: DateService) {}
@@ -57,6 +61,9 @@ export class DateComponent {
     updateYmd(ymd) {
         this.inputDate.ymd = ymd;
         this.updateCurrentDate.emit(this.inputDate.ymd);
+    }
+    updateHoldingPeriod(hpOption) {
+        this.updateHp.emit(hpOption);
     }
     submit() {
         const timeStamp = Date.parse(this.inputDate.ymd);

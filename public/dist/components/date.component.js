@@ -14,6 +14,7 @@ var constants_1 = require('../constants');
 var DateComponent = (function () {
     function DateComponent(dateService) {
         this.dateService = dateService;
+        this.hpOptions = constants_1.hpOptions;
         this.jump = constants_1.jump;
         this.jumpOptions = constants_1.jumpOptions;
         this.gap = constants_1.gap;
@@ -24,6 +25,7 @@ var DateComponent = (function () {
             'valid': true
         };
         this.updateCurrentDate = new core_1.EventEmitter();
+        this.updateHp = new core_1.EventEmitter();
     }
     DateComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -43,6 +45,9 @@ var DateComponent = (function () {
     DateComponent.prototype.updateYmd = function (ymd) {
         this.inputDate.ymd = ymd;
         this.updateCurrentDate.emit(this.inputDate.ymd);
+    };
+    DateComponent.prototype.updateHoldingPeriod = function (hpOption) {
+        this.updateHp.emit(hpOption);
     };
     DateComponent.prototype.submit = function () {
         var timeStamp = Date.parse(this.inputDate.ymd);
@@ -75,9 +80,17 @@ var DateComponent = (function () {
         __metadata('design:type', Object)
     ], DateComponent.prototype, "currentDate", void 0);
     __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], DateComponent.prototype, "hp", void 0);
+    __decorate([
         core_1.Output(), 
         __metadata('design:type', Object)
     ], DateComponent.prototype, "updateCurrentDate", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], DateComponent.prototype, "updateHp", void 0);
     DateComponent = __decorate([
         core_1.Component({
             selector: 'date-component',

@@ -9,6 +9,7 @@ from '@angular/http';
 
 //import constants
 import {
+  hp,
   limit,
   limitOptions,
   start,
@@ -60,6 +61,7 @@ export class ExplorationViewer {
 
   }
   currentDate = start
+  hp = hp
   stocks = []
   metaDefs = []
   futureDates = []
@@ -70,8 +72,14 @@ export class ExplorationViewer {
   spread = spread
   spreadOptions = spreadOptions
   update(event) {
-    this.currentDate = event;
-    this._dataService.getData(event).subscribe((processedData) => {
+    /* The event is either an update to the current date or an update to the holding period. */
+    if (isNaN(event)) {
+      this.currentDate = event;
+    }
+    else {
+      this.hp = event;
+    }
+    this._dataService.getData(this.currentDate, this.hp).subscribe((processedData) => {
       [this.stocks, this.metaDefs, this.futureDates, this.cpMetaDefs, this.benchmarks] = processedData;
       if (this.limit > this.stocks.length || this.limitOptions.indexOf(this.limit) === -1) {
         this.limit = this.stocks.length

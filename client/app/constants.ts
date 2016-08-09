@@ -1,4 +1,9 @@
+/*
+A module that contains the default constants for the applications.
+*/
 const excluded = ['t', 'n'],
+    hp = 63,
+    hpOptions = [22, 43, 127, 253],
     limit = 67,
     limitOptions = [25, 37, 50, 67, 75, 100],
     start = '2015-10-13',
@@ -12,6 +17,8 @@ const excluded = ['t', 'n'],
 
 export {
     excluded,
+    hp,
+    hpOptions,
     limit,
     limitOptions,
     start,

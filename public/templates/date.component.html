@@ -17,4 +17,14 @@
         </ul>
     </div>
     <button class='btn' (click)='increment("up")' [disabled]='currentDate === validDates[validDates.length - 1]'>+</button>
+    <div class='div-inline'>
+        <ul class='nav nav-tabs'>
+            <li class="active dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="">Holding Period: {{hp}}  trading {{(hp === 1)? 'day': 'days'}}<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li *ngFor='let hpOption of hpOptions'><a href="#" (click)='updateHoldingPeriod(hpOption)'>{{hpOption}}</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
 </form>

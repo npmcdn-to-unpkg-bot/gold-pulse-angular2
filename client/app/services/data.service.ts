@@ -80,10 +80,10 @@ export class DataService {
         return [stocks, metaDefs, futureDates, cpMetaDefs, benchmarks];
     }
 
-    getData(query = '') {
-        return this.http.get(`../edp-api-v3a.php?m=${query}`).map(response => {
-            return response.json();
-        }).map(data => this._processData(data));
+    getData(ymd = '', hp = 63) {
+        return this.http.get(`../edp-api-v3a.php?m=${ymd}&hp=${hp}`)
+            .map(response => response.json())
+            .map(data => this._processData(data));
     }
     modifySpread(stocks, futureDates, spread) {
         const dollarSpread = spread / 100;

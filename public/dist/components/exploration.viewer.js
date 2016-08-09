@@ -21,6 +21,7 @@ var ExplorationViewer = (function () {
     function ExplorationViewer(_dataService) {
         this._dataService = _dataService;
         this.currentDate = constants_1.start;
+        this.hp = constants_1.hp;
         this.stocks = [];
         this.metaDefs = [];
         this.futureDates = [];
@@ -33,8 +34,13 @@ var ExplorationViewer = (function () {
     }
     ExplorationViewer.prototype.update = function (event) {
         var _this = this;
-        this.currentDate = event;
-        this._dataService.getData(event).subscribe(function (processedData) {
+        if (isNaN(event)) {
+            this.currentDate = event;
+        }
+        else {
+            this.hp = event;
+        }
+        this._dataService.getData(this.currentDate, this.hp).subscribe(function (processedData) {
             _this.stocks = processedData[0], _this.metaDefs = processedData[1], _this.futureDates = processedData[2], _this.cpMetaDefs = processedData[3], _this.benchmarks = processedData[4];
             if (_this.limit > _this.stocks.length || _this.limitOptions.indexOf(_this.limit) === -1) {
                 _this.limit = _this.stocks.length;

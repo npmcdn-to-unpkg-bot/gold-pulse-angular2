@@ -14,9 +14,7 @@ import 'rxjs/add/operator/map';
 export class DateService {
     constructor(private http: Http) {}
     getValidDates() {
-        return this.http.get('../valid-dates-api.php').map(response => {
-            return response.json();
-        });
+        return this.http.get('../valid-dates-api.php').map(response => response.json());
     }
 
 }

@@ -73,12 +73,13 @@ var DataService = (function () {
         var benchmarks = this._buildBenchmarks(cpMetaDefs, futureDates, dates);
         return [stocks, metaDefs, futureDates, cpMetaDefs, benchmarks];
     };
-    DataService.prototype.getData = function (query) {
+    DataService.prototype.getData = function (ymd, hp) {
         var _this = this;
-        if (query === void 0) { query = ''; }
-        return this.http.get("../edp-api-v3a.php?m=" + query).map(function (response) {
-            return response.json();
-        }).map(function (data) { return _this._processData(data); });
+        if (ymd === void 0) { ymd = ''; }
+        if (hp === void 0) { hp = 63; }
+        return this.http.get("../edp-api-v3a.php?m=" + ymd + "&hp=" + hp)
+            .map(function (response) { return response.json(); })
+            .map(function (data) { return _this._processData(data); });
     };
     DataService.prototype.modifySpread = function (stocks, futureDates, spread) {
         var dollarSpread = spread / 100;

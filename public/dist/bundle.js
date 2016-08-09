@@ -60674,6 +60674,7 @@ var constants_1 = require('../constants');
 var DateComponent = (function () {
     function DateComponent(dateService) {
         this.dateService = dateService;
+        this.hpOptions = constants_1.hpOptions;
         this.jump = constants_1.jump;
         this.jumpOptions = constants_1.jumpOptions;
         this.gap = constants_1.gap;
@@ -60684,6 +60685,7 @@ var DateComponent = (function () {
             'valid': true
         };
         this.updateCurrentDate = new core_1.EventEmitter();
+        this.updateHp = new core_1.EventEmitter();
     }
     DateComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -60703,6 +60705,9 @@ var DateComponent = (function () {
     DateComponent.prototype.updateYmd = function (ymd) {
         this.inputDate.ymd = ymd;
         this.updateCurrentDate.emit(this.inputDate.ymd);
+    };
+    DateComponent.prototype.updateHoldingPeriod = function (hpOption) {
+        this.updateHp.emit(hpOption);
     };
     DateComponent.prototype.submit = function () {
         var timeStamp = Date.parse(this.inputDate.ymd);
@@ -60735,9 +60740,17 @@ var DateComponent = (function () {
         __metadata('design:type', Object)
     ], DateComponent.prototype, "currentDate", void 0);
     __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], DateComponent.prototype, "hp", void 0);
+    __decorate([
         core_1.Output(), 
         __metadata('design:type', Object)
     ], DateComponent.prototype, "updateCurrentDate", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], DateComponent.prototype, "updateHp", void 0);
     DateComponent = __decorate([
         core_1.Component({
             selector: 'date-component',
@@ -60774,6 +60787,7 @@ var ExplorationViewer = (function () {
     function ExplorationViewer(_dataService) {
         this._dataService = _dataService;
         this.currentDate = constants_1.start;
+        this.hp = constants_1.hp;
         this.stocks = [];
         this.metaDefs = [];
         this.futureDates = [];
@@ -60786,8 +60800,13 @@ var ExplorationViewer = (function () {
     }
     ExplorationViewer.prototype.update = function (event) {
         var _this = this;
-        this.currentDate = event;
-        this._dataService.getData(event).subscribe(function (processedData) {
+        if (isNaN(event)) {
+            this.currentDate = event;
+        }
+        else {
+            this.hp = event;
+        }
+        this._dataService.getData(this.currentDate, this.hp).subscribe(function (processedData) {
             _this.stocks = processedData[0], _this.metaDefs = processedData[1], _this.futureDates = processedData[2], _this.cpMetaDefs = processedData[3], _this.benchmarks = processedData[4];
             if (_this.limit > _this.stocks.length || _this.limitOptions.indexOf(_this.limit) === -1) {
                 _this.limit = _this.stocks.length;
@@ -61001,8 +61020,10 @@ exports.StockTable = StockTable;
 
 },{"../constants":354,"../pipes/custom-percent.pipe":356,"../pipes/format.pipe":357,"../pipes/match.pipe":358,"../pipes/metric.pipe":359,"../pipes/sort.pipe":361,"../services/quantile.service":364,"@angular/core":148}],354:[function(require,module,exports){
 "use strict";
-var excluded = ['t', 'n'], limit = 67, limitOptions = [25, 37, 50, 67, 75, 100], start = '2015-10-13', jump = 1, jumpOptions = [1, 10, 11, 23, 63, 127], gap = 22, gapOptions = [22, 43, 63, 127, 253], spread = 1, spreadOptions = [0, 1 / 8, 1 / 4, 1 / 2, 3 / 4, 1], defaultSelection = null;
+var excluded = ['t', 'n'], hp = 63, hpOptions = [22, 43, 127, 253], limit = 67, limitOptions = [25, 37, 50, 67, 75, 100], start = '2015-10-13', jump = 1, jumpOptions = [1, 10, 11, 23, 63, 127], gap = 22, gapOptions = [22, 43, 63, 127, 253], spread = 1, spreadOptions = [0, 1 / 8, 1 / 4, 1 / 2, 3 / 4, 1], defaultSelection = null;
 exports.excluded = excluded;
+exports.hp = hp;
+exports.hpOptions = hpOptions;
 exports.limit = limit;
 exports.limitOptions = limitOptions;
 exports.start = start;
@@ -61290,12 +61311,13 @@ var DataService = (function () {
         var benchmarks = this._buildBenchmarks(cpMetaDefs, futureDates, dates);
         return [stocks, metaDefs, futureDates, cpMetaDefs, benchmarks];
     };
-    DataService.prototype.getData = function (query) {
+    DataService.prototype.getData = function (ymd, hp) {
         var _this = this;
-        if (query === void 0) { query = ''; }
-        return this.http.get("../edp-api-v3a.php?m=" + query).map(function (response) {
-            return response.json();
-        }).map(function (data) { return _this._processData(data); });
+        if (ymd === void 0) { ymd = ''; }
+        if (hp === void 0) { hp = 63; }
+        return this.http.get("../edp-api-v3a.php?m=" + ymd + "&hp=" + hp)
+            .map(function (response) { return response.json(); })
+            .map(function (data) { return _this._processData(data); });
     };
     DataService.prototype.modifySpread = function (stocks, futureDates, spread) {
         var dollarSpread = spread / 100;
@@ -61347,9 +61369,7 @@ var DateService = (function () {
         this.http = http;
     }
     DateService.prototype.getValidDates = function () {
-        return this.http.get('../valid-dates-api.php').map(function (response) {
-            return response.json();
-        });
+        return this.http.get('../valid-dates-api.php').map(function (response) { return response.json(); });
     };
     DateService = __decorate([
         core_1.Injectable(), 
