@@ -60793,6 +60793,7 @@ var ExplorationViewer = (function () {
         this.futureDates = [];
         this.cpMetaDefs = [];
         this.benchmarks = {};
+        this.thresholds = [];
         this.limit = constants_1.limit;
         this.limitOptions = constants_1.limitOptions;
         this.spread = constants_1.spread;
@@ -60822,6 +60823,9 @@ var ExplorationViewer = (function () {
     };
     ExplorationViewer.prototype.ngOnInit = function () {
         var _this = this;
+        this._dataService.config().subscribe(function (configObj) {
+            _this.thresholds = configObj.thresholds ? configObj.thresholds : [];
+        });
         this._dataService.getData(this.currentDate).subscribe(function (processedData) {
             _this.stocks = processedData[0], _this.metaDefs = processedData[1], _this.futureDates = processedData[2], _this.cpMetaDefs = processedData[3], _this.benchmarks = processedData[4];
         });
@@ -61253,6 +61257,10 @@ var DataService = (function () {
     function DataService(http) {
         this.http = http;
     }
+    DataService.prototype.config = function () {
+        return this.http.get('../config')
+            .map(function (response) { return response.json(); });
+    };
     DataService.prototype._buildBenchmarks = function (cpMetaDefs, futureDates, dates) {
         var benchmarks = dates[0].cp;
         var _loop_1 = function(cpMetaDef) {

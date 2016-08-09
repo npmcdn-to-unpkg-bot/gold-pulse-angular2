@@ -67,6 +67,7 @@ export class ExplorationViewer {
   futureDates = []
   cpMetaDefs = []
   benchmarks = {}
+  thresholds = []
   limit = limit
   limitOptions = limitOptions
   spread = spread
@@ -96,6 +97,10 @@ export class ExplorationViewer {
 
   }
   ngOnInit() {
+    this._dataService.config().subscribe(configObj => {
+      this.thresholds = configObj.thresholds ? configObj.thresholds : [];
+    });
+
     this._dataService.getData(this.currentDate).subscribe((processedData) => {
       [this.stocks, this.metaDefs, this.futureDates, this.cpMetaDefs, this.benchmarks] = processedData;
     });

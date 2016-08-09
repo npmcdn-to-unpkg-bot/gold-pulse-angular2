@@ -3,14 +3,17 @@ var request = require('request');
 
 var app = express();
 
-//GoldMinerPulse API urls
-var demo_base = "https://www.goldminerpulse.com/_demo789/edp-api-v3a.php?";
+/*GoldMinerPulse API urls*/
+var demo_base = 'https://www.goldminerpulse.com/_demo789/edp-api-v3a.php?';
 var valid_dates = 'https://www.goldminerpulse.com/_demo789/valid-dates-api.php';
 
-//serve client 
+/* API for configuring app */
+var configAPI = 'https://www.goldminerpulse.com/_demo789/config.php';
+
+/*serve public */
 app.use(express.static(__dirname + '/public'));
 
-//routes for querys and valid dates 
+/*routes for querys and valid dates*/
 app.get('/edp-api-v3a.php', (req, res) => {
     var ymd = req.query.m;
     var hp = req.query.hp;
@@ -21,14 +24,23 @@ app.get('/edp-api-v3a.php', (req, res) => {
     query.on('end', function() {
         res.end();
     });
-    app.get('/valid-dates-api.php', (req, res) => {
-        var query = request(valid_dates);
-        query.pipe(res);
-        query.on('end', function() {
-            res.end();
-        });
-    });
+});
 
+app.get('/valid-dates-api.php', (req, res) => {
+    var query = request(valid_dates);
+    query.pipe(res);
+    query.on('end', () => {
+        res.end();
+    });
+});
+
+/* App configuration route */
+app.get('/config', (req, res) => {
+    var query = request(configAPI);
+    query.pipe(res);
+    query.on('end', () => {
+        res.end();
+    });
 });
 
 

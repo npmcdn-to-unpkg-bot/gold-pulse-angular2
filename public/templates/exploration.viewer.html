@@ -8,8 +8,10 @@
       </date-component>
     </div>
   </div>
+  <!--row-->
   <div class="row">
-    <div class="col-xs-12">
+    <!--column-->
+    <div class="col-xs-6">
       <div class="div-inline">
         <ul class="nav nav-tabs">
           <li class="active dropdown">
@@ -26,8 +28,7 @@
       <div class="div-inline">
         <ul class="nav nav-tabs">
           <li class="active dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="">Buy/Sell Spread in cents: {{spread}} <span class="caret"></span>
-        </a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="">Buy/Sell Spread in cents: {{spread}} <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li *ngFor='let option of spreadOptions'><a href="#" (click)='modifySpread(option)'>{{option}}</a></li>
             </ul>
@@ -35,7 +36,23 @@
         </ul>
       </div>
     </div>
+    <!--end:column-->
+    <!--column-->
+    <div class='col-xs-6' *ngIf='thresholds.length'>
+      <div class="div-inline" *ngFor='let threshold of thresholds'>
+        <ul class="nav nav-tabs">
+          <li class="active dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="">{{threshold.short}} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li *ngFor='let gt of threshold.gt'><a href="#"> at least {{gt}}</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!--end:column-->
   </div>
+  <!--end:row-->
 </div>
 
 <stock-table [stocks]='stocks' [metaDefs]='metaDefs' [futureDates]='futureDates' [cpMetaDefs]='cpMetaDefs' [benchmarks]='benchmarks' [limit]='limit' [currentDate]='currentDate' [spread]='spread'></stock-table>

@@ -12,6 +12,10 @@ import 'rxjs/add/operator/map';
 
 export class DataService {
     constructor(private http: Http) {}
+    config() {
+        return this.http.get('../config')
+            .map(response => response.json())
+    }
     _buildBenchmarks(cpMetaDefs, futureDates, dates) {
         //helper function for building average returns for each benchmark
 

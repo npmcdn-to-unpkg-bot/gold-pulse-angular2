@@ -15,6 +15,10 @@ var DataService = (function () {
     function DataService(http) {
         this.http = http;
     }
+    DataService.prototype.config = function () {
+        return this.http.get('../config')
+            .map(function (response) { return response.json(); });
+    };
     DataService.prototype._buildBenchmarks = function (cpMetaDefs, futureDates, dates) {
         var benchmarks = dates[0].cp;
         var _loop_1 = function(cpMetaDef) {
