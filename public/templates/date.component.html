@@ -1,5 +1,5 @@
 <form>
-    <label>Change {{currentDate}} to </label>
+    <label>Update {{currentDate}} to </label>
     <span class='span-inline'>
     <label for='date-input'><small>{{min}} to {{max}}</small></label>
     <input type='text' id='date-input' placeholder='yyyy-mm-dd' [(ngModel)]='inputDate.ymd' (ngModelChange)='flag($event)' [class.valid]='inputDate.valid' [class.invalid]='!inputDate.valid' />

@@ -14,7 +14,7 @@ var ThresholdPipe = (function () {
     function ThresholdPipe() {
     }
     ThresholdPipe.prototype.transform = function (stocks, thresholds) {
-        var copy = stocks;
+        var copy = stocks.slice();
         var _loop_1 = function(threshold) {
             var sid = threshold.sid;
             var val = threshold.val;

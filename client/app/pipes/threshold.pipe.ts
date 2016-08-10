@@ -13,7 +13,7 @@ import * as _ from 'lodash';
 
 export class ThresholdPipe implements PipeTransform {
     transform(stocks, thresholds) {
-        let copy = stocks;
+        let copy = stocks.slice();
 
         for (let threshold of thresholds) {
             const sid = threshold.sid;
