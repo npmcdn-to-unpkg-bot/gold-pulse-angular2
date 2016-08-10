@@ -13,7 +13,7 @@ import 'rxjs/add/operator/map';
 export class DataService {
     constructor(private http: Http) {}
     config() {
-        return this.http.get('../config')
+        return this.http.get('../config.php')
             .map(response => response.json())
     }
     _buildBenchmarks(cpMetaDefs, futureDates, dates) {

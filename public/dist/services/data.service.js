@@ -16,7 +16,7 @@ var DataService = (function () {
         this.http = http;
     }
     DataService.prototype.config = function () {
-        return this.http.get('../config')
+        return this.http.get('../config.php')
             .map(function (response) { return response.json(); });
     };
     DataService.prototype._buildBenchmarks = function (cpMetaDefs, futureDates, dates) {

@@ -35,7 +35,7 @@ app.get('/valid-dates-api.php', (req, res) => {
 });
 
 /* App configuration route */
-app.get('/config', (req, res) => {
+app.get('/config.php', (req, res) => {
     var query = request(configAPI);
     query.pipe(res);
     query.on('end', () => {
