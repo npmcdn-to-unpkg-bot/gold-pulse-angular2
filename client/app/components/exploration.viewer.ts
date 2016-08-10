@@ -7,7 +7,9 @@ import {
 }
 from '@angular/http';
 
-//import constants
+import * as _ from 'lodash';
+
+/* import constants */
 import {
   hp,
   limit,
@@ -68,6 +70,7 @@ export class ExplorationViewer {
   cpMetaDefs = []
   benchmarks = {}
   thresholds = []
+  activeThresholds = []
   limit = limit
   limitOptions = limitOptions
   spread = spread
@@ -95,6 +98,51 @@ export class ExplorationViewer {
     this.spread = event;
     this.stocks = this._dataService.modifySpread(this.stocks, this.futureDates, this.spread);
 
+  }
+  activateThreshold(sid, sign, val) {
+    let current = this.activeThresholds.find(threshold => threshold.sid === sid);
+    /* If there is already a threshold set for metric with sid, update it. */
+    if (current) {
+      current.sign = sign;
+      current.val = val;
+      console.log(this.activeThresholds);
+    }
+    /* Otherwise, create one. */
+    else {
+      this.activeThresholds.push({
+        sid,
+        sign,
+        val
+      });
+      console.log(this.activeThresholds);
+
+    }
+  }
+  deactivateThreshold(sid) {
+    /* If metric with sid had an active threshold, remove it. */
+    _.remove(this.activeThresholds, threshold => threshold.sid === sid);
+    console.log(this.activeThresholds);
+  }
+  displayThreshold(sid) {
+    /* If there is an active threshold for metric with sid, return threshold; else 'none'. */
+    const active = this.activeThresholds.find(threshold => threshold.sid === sid);
+    
+    if (active) {
+      let sign;
+      switch (active.sign) {
+        case 'gt':
+          sign = '>';
+          break;
+        case 'lt':
+          sign = '<';
+          break;
+        case 'eq':
+          sign = '=';
+      }
+      return `${sign} ${active.val}`;
+    }
+
+    return 'none';
   }
   ngOnInit() {
     this._dataService.config().subscribe(configObj => {

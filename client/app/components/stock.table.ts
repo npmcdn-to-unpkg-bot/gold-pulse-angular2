@@ -24,7 +24,10 @@ import {
 from '../pipes/custom-percent.pipe';
 
 // import FormatPipe, which formats decimal data
-import { FormatPipe} from '../pipes/format.pipe';
+import {
+    FormatPipe
+}
+from '../pipes/format.pipe';
 
 //import MetricPipe, which returns the metadefinitons that are metrics
 import {
@@ -32,6 +35,8 @@ import {
 }
 from '../pipes/metric.pipe';
 
+/* ThresholdPipe filters stocks based on the thresholds*/
+import { ThresholdPipe} from '../pipes/threshold.pipe';
 //import QuantileService
 
 import {
@@ -49,7 +54,7 @@ from '../constants';
     selector: 'stock-table',
     templateUrl: './templates/stock.table.html',
     styleUrls: ['./css/stock.table.css'],
-    pipes: [MatchPipe, SortPipe, CustomPercentPipe, MetricPipe, FormatPipe]
+    pipes: [MatchPipe, SortPipe, CustomPercentPipe, MetricPipe, FormatPipe, ThresholdPipe]
 })
 
 export class StockTable {
@@ -61,6 +66,7 @@ export class StockTable {
     @Input() benchmarks
     @Input() limit
     @Input() spread
+    @Input() thresholds
     selection = defaultSelection
     stockAverages = {}
     metricAverages = {}
@@ -101,7 +107,7 @@ export class StockTable {
                     b = s2[sid];
 
                 if (a < b) {
-                    return -1*alpha;
+                    return -1 * alpha;
                 }
                 else if (a > b) {
                     return alpha;

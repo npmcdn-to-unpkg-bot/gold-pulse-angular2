@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
+var _ = require('lodash');
 var constants_1 = require('../constants');
 var stock_table_1 = require('./stock.table');
 var date_component_1 = require('./date.component');
@@ -28,6 +29,7 @@ var ExplorationViewer = (function () {
         this.cpMetaDefs = [];
         this.benchmarks = {};
         this.thresholds = [];
+        this.activeThresholds = [];
         this.limit = constants_1.limit;
         this.limitOptions = constants_1.limitOptions;
         this.spread = constants_1.spread;
@@ -54,6 +56,44 @@ var ExplorationViewer = (function () {
     ExplorationViewer.prototype.modifySpread = function (event) {
         this.spread = event;
         this.stocks = this._dataService.modifySpread(this.stocks, this.futureDates, this.spread);
+    };
+    ExplorationViewer.prototype.activateThreshold = function (sid, sign, val) {
+        var current = this.activeThresholds.find(function (threshold) { return threshold.sid === sid; });
+        if (current) {
+            current.sign = sign;
+            current.val = val;
+            console.log(this.activeThresholds);
+        }
+        else {
+            this.activeThresholds.push({
+                sid: sid,
+                sign: sign,
+                val: val
+            });
+            console.log(this.activeThresholds);
+        }
+    };
+    ExplorationViewer.prototype.deactivateThreshold = function (sid) {
+        _.remove(this.activeThresholds, function (threshold) { return threshold.sid === sid; });
+        console.log(this.activeThresholds);
+    };
+    ExplorationViewer.prototype.displayThreshold = function (sid) {
+        var active = this.activeThresholds.find(function (threshold) { return threshold.sid === sid; });
+        if (active) {
+            var sign = void 0;
+            switch (active.sign) {
+                case 'gt':
+                    sign = '>';
+                    break;
+                case 'lt':
+                    sign = '<';
+                    break;
+                case 'eq':
+                    sign = '=';
+            }
+            return sign + " " + active.val;
+        }
+        return 'none';
     };
     ExplorationViewer.prototype.ngOnInit = function () {
         var _this = this;

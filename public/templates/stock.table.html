@@ -42,7 +42,7 @@
             </tr>
         </thead>
         <tbody *ngIf='stocks.length'>
-            <tr *ngFor='let stock of stocks | sort: selection:metaDefs| slice:0:limit; let i = index'>
+            <tr *ngFor='let stock of stocks |threshold: thresholds | sort: selection:metaDefs| slice:0:limit; let i = index'>
                 <td>{{i + 1}}</td>
                 <td *ngFor='let metaDef of metaDefs' [class.highlight]='selection === metaDef.sid' [class.table-right]="metaDef.sid !== 't' && metaDef.sid !== 'n' ">{{stock[metaDef.sid] | format : metaDef.ordinal}}</td>
                 <td *ngFor='let ymd of futureDates' [ngClass]='colorDates(stock, ymd)' class='table-right'>{{stock.closes | match: ymd}}</td>
