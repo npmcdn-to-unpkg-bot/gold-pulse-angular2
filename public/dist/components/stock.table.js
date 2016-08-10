@@ -45,24 +45,16 @@ var StockTable = (function () {
     };
     StockTable.prototype.averageByMetric = function (metaDef) {
         var sid = metaDef.sid;
-        var stocks = this.stocks;
+        var stocks = this.stocks.slice();
         if (stocks.filter(function (stock) { return stock[sid] === undefined; }).length === stocks.length) {
             return null;
         }
+        if (this.thresholds.length) {
+            stocks = new threshold_pipe_1.ThresholdPipe().transform(stocks, this.thresholds);
+            console.log(stocks);
+        }
         if (sid !== 'n' && sid !== 't') {
-            var alpha_1 = metaDef.ordinal ? 1 : -1;
-            stocks.sort(function (s1, s2) {
-                var a = s1[sid], b = s2[sid];
-                if (a < b) {
-                    return -1 * alpha_1;
-                }
-                else if (a > b) {
-                    return alpha_1;
-                }
-                else {
-                    return 0;
-                }
-            });
+            stocks = new sort_pipe_1.SortPipe().transform(stocks, sid, this.metaDefs);
             stocks = stocks.slice(0, this.limit);
             var sum = 0, count = 0;
             for (var _i = 0, stocks_1 = stocks; _i < stocks_1.length; _i++) {

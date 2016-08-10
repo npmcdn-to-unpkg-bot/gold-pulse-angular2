@@ -57,12 +57,15 @@ var ExplorationViewer = (function () {
         this.spread = event;
         this.stocks = this._dataService.modifySpread(this.stocks, this.futureDates, this.spread);
     };
+    ExplorationViewer.prototype.updateActiveThresholds = function () {
+        var copy = this.activeThresholds.slice();
+        this.activeThresholds = copy;
+    };
     ExplorationViewer.prototype.activateThreshold = function (sid, sign, val) {
         var current = this.activeThresholds.find(function (threshold) { return threshold.sid === sid; });
         if (current) {
             current.sign = sign;
             current.val = val;
-            console.log(this.activeThresholds);
         }
         else {
             this.activeThresholds.push({
@@ -70,12 +73,12 @@ var ExplorationViewer = (function () {
                 sign: sign,
                 val: val
             });
-            console.log(this.activeThresholds);
         }
+        this.updateActiveThresholds();
     };
     ExplorationViewer.prototype.deactivateThreshold = function (sid) {
         _.remove(this.activeThresholds, function (threshold) { return threshold.sid === sid; });
-        console.log(this.activeThresholds);
+        this.updateActiveThresholds();
     };
     ExplorationViewer.prototype.displayThreshold = function (sid) {
         var active = this.activeThresholds.find(function (threshold) { return threshold.sid === sid; });

@@ -15,8 +15,10 @@ export class SortPipe implements PipeTransform {
                 ordinal = metaDef.ordinal ? metaDef.ordinal : false,
                 alpha = (sid === 'n' || sid === 't' || ordinal) ? 1 : -1;
 
-            //If sid refers to name or ticker or refers to an ordinal metric, sort in descending order; otherwise, sort in ascending order.
-            //Hence the need for alpha.
+            /*If sid refers to name or ticker or refers to an ordinal metric, sort in descending order; 
+             *otherwise, sort in ascending order.
+             *Hence the need for alpha.
+             */
 
             if (stocks && stocks.length && sid) {
                 stocks.sort((s1, s2) => {

@@ -36,7 +36,10 @@ import {
 from '../pipes/metric.pipe';
 
 /* ThresholdPipe filters stocks based on the thresholds*/
-import { ThresholdPipe} from '../pipes/threshold.pipe';
+import {
+    ThresholdPipe
+}
+from '../pipes/threshold.pipe';
 //import QuantileService
 
 import {
@@ -94,28 +97,19 @@ export class StockTable {
     }
     averageByMetric(metaDef) {
         const sid = metaDef.sid;
-        let stocks = this.stocks;
-        //Reality check to ensure at least one stock has a value for the metric
+        let stocks = this.stocks.slice();
+        /*Reality check to ensure at least one stock has a value for the metric*/
         if (stocks.filter(stock => stock[sid] === undefined).length === stocks.length) {
             return null;
         }
+        /* Apply ThresholdPipe */
+        if (this.thresholds.length) {
+            stocks = new ThresholdPipe().transform(stocks, this.thresholds);
+            console.log(stocks);
+        }
+        /* Apply the sort and limit pipes */
         if (sid !== 'n' && sid !== 't') {
-            const alpha = metaDef.ordinal ? 1 : -1;
-
-            stocks.sort((s1, s2) => {
-                const a = s1[sid],
-                    b = s2[sid];
-
-                if (a < b) {
-                    return -1 * alpha;
-                }
-                else if (a > b) {
-                    return alpha;
-                }
-                else {
-                    return 0;
-                }
-            });
+            stocks = new SortPipe().transform(stocks, sid, this.metaDefs);
 
             stocks = stocks.slice(0, this.limit);
             let sum = 0,

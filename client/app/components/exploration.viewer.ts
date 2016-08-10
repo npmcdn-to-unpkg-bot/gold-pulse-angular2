@@ -99,13 +99,19 @@ export class ExplorationViewer {
     this.stocks = this._dataService.modifySpread(this.stocks, this.futureDates, this.spread);
 
   }
+  updateActiveThresholds() {
+    /* Utility to create a new version of activeThresholds
+     * This artifice ensures that ngChanges fires in StockTable
+     */
+    const copy = this.activeThresholds.slice();
+    this.activeThresholds = copy;
+  }
   activateThreshold(sid, sign, val) {
     let current = this.activeThresholds.find(threshold => threshold.sid === sid);
     /* If there is already a threshold set for metric with sid, update it. */
     if (current) {
       current.sign = sign;
       current.val = val;
-      console.log(this.activeThresholds);
     }
     /* Otherwise, create one. */
     else {
@@ -114,19 +120,18 @@ export class ExplorationViewer {
         sign,
         val
       });
-      console.log(this.activeThresholds);
-
     }
+    this.updateActiveThresholds();
   }
   deactivateThreshold(sid) {
     /* If metric with sid had an active threshold, remove it. */
     _.remove(this.activeThresholds, threshold => threshold.sid === sid);
-    console.log(this.activeThresholds);
+    this.updateActiveThresholds();
   }
   displayThreshold(sid) {
     /* If there is an active threshold for metric with sid, return threshold; else 'none'. */
     const active = this.activeThresholds.find(threshold => threshold.sid === sid);
-    
+
     if (active) {
       let sign;
       switch (active.sign) {
