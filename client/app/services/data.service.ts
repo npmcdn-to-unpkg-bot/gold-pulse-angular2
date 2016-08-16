@@ -13,6 +13,7 @@ import 'rxjs/add/operator/map';
 export class DataService {
     constructor(private http: Http) {}
     config() {
+        /* Calls out to an internal API for configuring the app */
         return this.http.get('../config.php')
             .map(response => response.json())
     }

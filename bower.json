@@ -1,0 +1,25 @@
+{
+  "name": "gold-pulse",
+  "description": "Gold Pulse with angular 2",
+  "main": "server.js",
+  "authors": [
+    "Max Boyko <maxboykomax@gmail.com>"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "node",
+    "angular2"
+  ],
+  "homepage": "https://github.com/MaxBoykoII/gold-pulse-angular2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "font-awesome": "^4.6.3",
+    "easyfont-oswald": "easyfont/oswald"
+  }
+}

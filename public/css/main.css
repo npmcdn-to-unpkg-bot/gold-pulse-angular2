@@ -1,11 +1,12 @@
 body {
     background-color: rgb(238, 221, 130);
-    font-family: Verdana, sans-serif;
+    font-family: font-awesome, sans-serif;
 }
 
 h1 {
     background-color: #FAF3DD;
     width: 75%;
+    font-family: "Oswald Regular", sans-serif;
     margin: 0 auto;
 }
 
@@ -98,4 +99,8 @@ table caption {
 .span-inline label {
     display: block;
     font-weight: normal;
+    text-align: center;
+}
+.align-up {
+    padding-bottom: 8px;
 }
