@@ -31,18 +31,6 @@ var StockTable = (function () {
         event.preventDefault();
         this.selection = sid;
     };
-    StockTable.prototype.averageByStock = function (stock) {
-        var sum = 0, count = 0;
-        for (var _i = 0, _a = stock.closes; _i < _a.length; _i++) {
-            var date = _a[_i];
-            var change = parseFloat(date.change);
-            if (!isNaN(change)) {
-                sum += change;
-                count++;
-            }
-        }
-        return sum / count;
-    };
     StockTable.prototype.averageByMetric = function (metaDef) {
         var sid = metaDef.sid;
         var stocks = this.stocks.slice();
@@ -112,7 +100,7 @@ var StockTable = (function () {
         this.metricAverages = {};
         for (var _i = 0, _a = this.stocks; _i < _a.length; _i++) {
             var stock = _a[_i];
-            this.stockAverages[stock.id] = this.averageByStock(stock);
+            this.stockAverages[stock.id] = stock.meanReturn();
         }
         for (var _b = 0, _c = this.metaDefs; _b < _c.length; _b++) {
             var metaDef = _c[_b];

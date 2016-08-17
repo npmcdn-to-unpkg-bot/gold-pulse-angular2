@@ -83,18 +83,6 @@ export class StockTable {
         event.preventDefault();
         this.selection = sid;
     }
-    averageByStock(stock) {
-        let sum = 0,
-            count = 0;
-        for (let date of stock.closes) {
-            const change = parseFloat(date.change)
-            if (!isNaN(change)) {
-                sum += change;
-                count++;
-            }
-        }
-        return sum / count;
-    }
     averageByMetric(metaDef) {
         const sid = metaDef.sid;
         let stocks = this.stocks.slice();
@@ -174,7 +162,7 @@ export class StockTable {
         this.stockAverages = {};
         this.metricAverages = {};
         for (let stock of this.stocks) {
-            this.stockAverages[stock.id] = this.averageByStock(stock);
+            this.stockAverages[stock.id] = stock.meanReturn();
         }
         for (let metaDef of this.metaDefs) {
             this.metricAverages[metaDef.sid] = this.averageByMetric(metaDef);

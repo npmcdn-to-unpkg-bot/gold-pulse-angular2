@@ -8,6 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _ = require('lodash');
+var stock_1 = require('../classes/stock');
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
 require('rxjs/add/operator/map');
@@ -47,32 +49,12 @@ var DataService = (function () {
     };
     DataService.prototype._processData = function (raw_data) {
         var dates = raw_data.dates, metaDefs = raw_data.meta_definitions, cpMetaDefs = raw_data.cp_meta_definitions;
-        var stocks = dates[0].oids, futureDates = dates.map(function (date) { return date.ymd; });
+        var stocks = _.head(dates).oids.map(function (oid) { return new stock_1.Stock(oid); }), futureDates = dates.map(function (date) { return date.ymd; });
         futureDates.splice(0, 1);
         metaDefs.splice(0, 1);
-        console.log(futureDates);
-        var _loop_3 = function(stock) {
-            var id = stock.id, close_2 = stock.c;
-            var closes = [];
-            var _loop_4 = function(ymd) {
-                var oid = dates.find(function (date) { return date.ymd === ymd; }).oids.find(function (oid) { return oid.id === id; }), futureClose = oid ? oid.c : 'NA', change = (!isNaN(close_2) && close_2 !== 0 && !isNaN(futureClose)) ?
-                    (((futureClose - close_2) / close_2) * 100).toFixed(1) + "%" :
-                    'NA';
-                closes.push({
-                    ymd: ymd,
-                    "close": futureClose,
-                    change: change
-                });
-            };
-            for (var _i = 0, futureDates_2 = futureDates; _i < futureDates_2.length; _i++) {
-                var ymd = futureDates_2[_i];
-                _loop_4(ymd);
-            }
-            stock.closes = closes;
-        };
-        for (var _a = 0, stocks_1 = stocks; _a < stocks_1.length; _a++) {
-            var stock = stocks_1[_a];
-            _loop_3(stock);
+        for (var _i = 0, stocks_1 = stocks; _i < stocks_1.length; _i++) {
+            var stock = stocks_1[_i];
+            stock.setCloses(futureDates, dates);
         }
         var benchmarks = this._buildBenchmarks(cpMetaDefs, futureDates, dates);
         return [stocks, metaDefs, futureDates, cpMetaDefs, benchmarks];
@@ -86,26 +68,7 @@ var DataService = (function () {
             .map(function (data) { return _this._processData(data); });
     };
     DataService.prototype.modifySpread = function (stocks, futureDates, spread) {
-        var dollarSpread = spread / 100;
-        for (var _i = 0, stocks_2 = stocks; _i < stocks_2.length; _i++) {
-            var stock = stocks_2[_i];
-            var close_3 = stock.c, oldCloses = stock.closes;
-            var newCloses = [];
-            var _loop_5 = function(ymd) {
-                var date = oldCloses.find(function (date) { return date.ymd === ymd; });
-                if (!isNaN(date.close) && !isNaN(close_3) && (close_3 + dollarSpread) > 0) {
-                    var modifiedClose = close_3 + dollarSpread, modifiedFutureClose = Math.max(date.close - dollarSpread, 0);
-                    var change = (((modifiedFutureClose - modifiedClose) / modifiedClose) * 100).toFixed(1) + "%";
-                    date.change = change;
-                }
-                newCloses.push(date);
-            };
-            for (var _a = 0, futureDates_3 = futureDates; _a < futureDates_3.length; _a++) {
-                var ymd = futureDates_3[_a];
-                _loop_5(ymd);
-            }
-            stock.closes = newCloses;
-        }
+        _.forEach(stocks, function (stock) { return stock.modifySpread(futureDates, spread); });
         return stocks;
     };
     DataService = __decorate([

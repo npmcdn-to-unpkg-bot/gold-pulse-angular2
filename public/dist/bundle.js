@@ -77271,6 +77271,72 @@ exports.tryCatch = tryCatch;
 
 },{"./errorObject":344}],352:[function(require,module,exports){
 "use strict";
+var _ = require('lodash');
+var Stock = (function () {
+    function Stock(oids) {
+        _.assign(this, oids);
+    }
+    Stock.prototype.setCloses = function (futureDates, dates) {
+        var closes = [];
+        var _loop_1 = function(ymd) {
+            var id = this_1.id;
+            var close_1 = this_1.c;
+            var oid = dates.find(function (date) { return date.ymd === ymd; }).oids.find(function (oid) { return oid.id === id; });
+            var futureClose = oid ? oid.c : 'NA';
+            var change = (!isNaN(close_1) && close_1 !== 0 && !isNaN(futureClose)) ?
+                (((futureClose - close_1) / close_1) * 100).toFixed(1) + "%" :
+                'NA';
+            closes.push({
+                ymd: ymd,
+                close: futureClose,
+                change: change
+            });
+        };
+        var this_1 = this;
+        for (var _i = 0, futureDates_1 = futureDates; _i < futureDates_1.length; _i++) {
+            var ymd = futureDates_1[_i];
+            _loop_1(ymd);
+        }
+        this.closes = closes;
+    };
+    Stock.prototype.modifySpread = function (futureDates, spread) {
+        var dollarSpread = spread / 100;
+        var close = this.c;
+        var oldCloses = this.closes;
+        var newCloses = [];
+        var _loop_2 = function(ymd) {
+            var date = oldCloses.find(function (date) { return date.ymd === ymd; });
+            if (!isNaN(date.close) && !isNaN(close) && (close + dollarSpread) > 0) {
+                var modifiedClose = close + dollarSpread, modifiedFutureClose = Math.max(date.close - dollarSpread, 0);
+                var change = (((modifiedFutureClose - modifiedClose) / modifiedClose) * 100).toFixed(1) + "%";
+                date.change = change;
+            }
+            newCloses.push(date);
+        };
+        for (var _i = 0, futureDates_2 = futureDates; _i < futureDates_2.length; _i++) {
+            var ymd = futureDates_2[_i];
+            _loop_2(ymd);
+        }
+        this.closes = newCloses;
+    };
+    Stock.prototype.meanReturn = function () {
+        var sum = 0, count = 0;
+        for (var _i = 0, _a = this.closes; _i < _a.length; _i++) {
+            var day = _a[_i];
+            var change = parseFloat(day.change);
+            if (!isNaN(change)) {
+                sum += change;
+                count++;
+            }
+        }
+        return sum / count;
+    };
+    return Stock;
+}());
+exports.Stock = Stock;
+
+},{"lodash":329}],353:[function(require,module,exports){
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -77375,7 +77441,7 @@ var DateComponent = (function () {
 }());
 exports.DateComponent = DateComponent;
 
-},{"../constants":355,"../services/date.service":365,"@angular/core":148}],353:[function(require,module,exports){
+},{"../constants":356,"../services/date.service":366,"@angular/core":148}],354:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77500,7 +77566,7 @@ var ExplorationViewer = (function () {
 }());
 exports.ExplorationViewer = ExplorationViewer;
 
-},{"../constants":355,"../pipes/shorten.pipe":361,"../services/data.service":364,"../services/date.service":365,"../services/quantile.service":366,"./date.component":352,"./stock.table":354,"@angular/core":148,"@angular/http":238,"lodash":329}],354:[function(require,module,exports){
+},{"../constants":356,"../pipes/shorten.pipe":362,"../services/data.service":365,"../services/date.service":366,"../services/quantile.service":367,"./date.component":353,"./stock.table":355,"@angular/core":148,"@angular/http":238,"lodash":329}],355:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77533,18 +77599,6 @@ var StockTable = (function () {
     StockTable.prototype.set = function (event, sid) {
         event.preventDefault();
         this.selection = sid;
-    };
-    StockTable.prototype.averageByStock = function (stock) {
-        var sum = 0, count = 0;
-        for (var _i = 0, _a = stock.closes; _i < _a.length; _i++) {
-            var date = _a[_i];
-            var change = parseFloat(date.change);
-            if (!isNaN(change)) {
-                sum += change;
-                count++;
-            }
-        }
-        return sum / count;
     };
     StockTable.prototype.averageByMetric = function (metaDef) {
         var sid = metaDef.sid;
@@ -77615,7 +77669,7 @@ var StockTable = (function () {
         this.metricAverages = {};
         for (var _i = 0, _a = this.stocks; _i < _a.length; _i++) {
             var stock = _a[_i];
-            this.stockAverages[stock.id] = this.averageByStock(stock);
+            this.stockAverages[stock.id] = stock.meanReturn();
         }
         for (var _b = 0, _c = this.metaDefs; _b < _c.length; _b++) {
             var metaDef = _c[_b];
@@ -77674,7 +77728,7 @@ var StockTable = (function () {
 }());
 exports.StockTable = StockTable;
 
-},{"../constants":355,"../pipes/custom-percent.pipe":357,"../pipes/format.pipe":358,"../pipes/match.pipe":359,"../pipes/metric.pipe":360,"../pipes/sort.pipe":362,"../pipes/threshold.pipe":363,"../services/quantile.service":366,"@angular/core":148}],355:[function(require,module,exports){
+},{"../constants":356,"../pipes/custom-percent.pipe":358,"../pipes/format.pipe":359,"../pipes/match.pipe":360,"../pipes/metric.pipe":361,"../pipes/sort.pipe":363,"../pipes/threshold.pipe":364,"../services/quantile.service":367,"@angular/core":148}],356:[function(require,module,exports){
 "use strict";
 var excluded = ['t', 'n'], hp = 63, hpOptions = [22, 43, 63, 127, 253], limit = 67, limitOptions = [25, 37, 50, 67, 75, 100], start = '2015-10-13', jump = 1, jumpOptions = [1, 10, 11, 23, 63, 127], gap = 22, gapOptions = [22, 43, 63, 127, 253], spread = 1, spreadOptions = [0, 1 / 8, 1 / 4, 1 / 2, 3 / 4, 1], defaultSelection = null;
 exports.excluded = excluded;
@@ -77691,7 +77745,7 @@ exports.spread = spread;
 exports.spreadOptions = spreadOptions;
 exports.defaultSelection = defaultSelection;
 
-},{}],356:[function(require,module,exports){
+},{}],357:[function(require,module,exports){
 "use strict";
 var exploration_viewer_1 = require('./components/exploration.viewer');
 var platform_browser_dynamic_1 = require('@angular/platform-browser-dynamic');
@@ -77699,7 +77753,7 @@ var core_1 = require('@angular/core');
 core_1.enableProdMode();
 platform_browser_dynamic_1.bootstrap(exploration_viewer_1.ExplorationViewer);
 
-},{"./components/exploration.viewer":353,"@angular/core":148,"@angular/platform-browser-dynamic":259}],357:[function(require,module,exports){
+},{"./components/exploration.viewer":354,"@angular/core":148,"@angular/platform-browser-dynamic":259}],358:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77727,7 +77781,7 @@ var CustomPercentPipe = (function () {
 }());
 exports.CustomPercentPipe = CustomPercentPipe;
 
-},{"@angular/core":148}],358:[function(require,module,exports){
+},{"@angular/core":148}],359:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77758,7 +77812,7 @@ var FormatPipe = (function () {
 }());
 exports.FormatPipe = FormatPipe;
 
-},{"@angular/core":148}],359:[function(require,module,exports){
+},{"@angular/core":148}],360:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77787,7 +77841,7 @@ var MatchPipe = (function () {
 }());
 exports.MatchPipe = MatchPipe;
 
-},{"@angular/core":148}],360:[function(require,module,exports){
+},{"@angular/core":148}],361:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77816,7 +77870,7 @@ var MetricPipe = (function () {
 }());
 exports.MetricPipe = MetricPipe;
 
-},{"../constants":355,"@angular/core":148}],361:[function(require,module,exports){
+},{"../constants":356,"@angular/core":148}],362:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77845,7 +77899,7 @@ var ShortenPipe = (function () {
 }());
 exports.ShortenPipe = ShortenPipe;
 
-},{"@angular/core":148}],362:[function(require,module,exports){
+},{"@angular/core":148}],363:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77891,7 +77945,7 @@ var SortPipe = (function () {
 }());
 exports.SortPipe = SortPipe;
 
-},{"@angular/core":148}],363:[function(require,module,exports){
+},{"@angular/core":148}],364:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77941,7 +77995,7 @@ var ThresholdPipe = (function () {
 }());
 exports.ThresholdPipe = ThresholdPipe;
 
-},{"@angular/core":148,"lodash":329}],364:[function(require,module,exports){
+},{"@angular/core":148,"lodash":329}],365:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77952,6 +78006,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _ = require('lodash');
+var stock_1 = require('../classes/stock');
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
 require('rxjs/add/operator/map');
@@ -77991,32 +78047,12 @@ var DataService = (function () {
     };
     DataService.prototype._processData = function (raw_data) {
         var dates = raw_data.dates, metaDefs = raw_data.meta_definitions, cpMetaDefs = raw_data.cp_meta_definitions;
-        var stocks = dates[0].oids, futureDates = dates.map(function (date) { return date.ymd; });
+        var stocks = _.head(dates).oids.map(function (oid) { return new stock_1.Stock(oid); }), futureDates = dates.map(function (date) { return date.ymd; });
         futureDates.splice(0, 1);
         metaDefs.splice(0, 1);
-        console.log(futureDates);
-        var _loop_3 = function(stock) {
-            var id = stock.id, close_2 = stock.c;
-            var closes = [];
-            var _loop_4 = function(ymd) {
-                var oid = dates.find(function (date) { return date.ymd === ymd; }).oids.find(function (oid) { return oid.id === id; }), futureClose = oid ? oid.c : 'NA', change = (!isNaN(close_2) && close_2 !== 0 && !isNaN(futureClose)) ?
-                    (((futureClose - close_2) / close_2) * 100).toFixed(1) + "%" :
-                    'NA';
-                closes.push({
-                    ymd: ymd,
-                    "close": futureClose,
-                    change: change
-                });
-            };
-            for (var _i = 0, futureDates_2 = futureDates; _i < futureDates_2.length; _i++) {
-                var ymd = futureDates_2[_i];
-                _loop_4(ymd);
-            }
-            stock.closes = closes;
-        };
-        for (var _a = 0, stocks_1 = stocks; _a < stocks_1.length; _a++) {
-            var stock = stocks_1[_a];
-            _loop_3(stock);
+        for (var _i = 0, stocks_1 = stocks; _i < stocks_1.length; _i++) {
+            var stock = stocks_1[_i];
+            stock.setCloses(futureDates, dates);
         }
         var benchmarks = this._buildBenchmarks(cpMetaDefs, futureDates, dates);
         return [stocks, metaDefs, futureDates, cpMetaDefs, benchmarks];
@@ -78030,26 +78066,7 @@ var DataService = (function () {
             .map(function (data) { return _this._processData(data); });
     };
     DataService.prototype.modifySpread = function (stocks, futureDates, spread) {
-        var dollarSpread = spread / 100;
-        for (var _i = 0, stocks_2 = stocks; _i < stocks_2.length; _i++) {
-            var stock = stocks_2[_i];
-            var close_3 = stock.c, oldCloses = stock.closes;
-            var newCloses = [];
-            var _loop_5 = function(ymd) {
-                var date = oldCloses.find(function (date) { return date.ymd === ymd; });
-                if (!isNaN(date.close) && !isNaN(close_3) && (close_3 + dollarSpread) > 0) {
-                    var modifiedClose = close_3 + dollarSpread, modifiedFutureClose = Math.max(date.close - dollarSpread, 0);
-                    var change = (((modifiedFutureClose - modifiedClose) / modifiedClose) * 100).toFixed(1) + "%";
-                    date.change = change;
-                }
-                newCloses.push(date);
-            };
-            for (var _a = 0, futureDates_3 = futureDates; _a < futureDates_3.length; _a++) {
-                var ymd = futureDates_3[_a];
-                _loop_5(ymd);
-            }
-            stock.closes = newCloses;
-        }
+        _.forEach(stocks, function (stock) { return stock.modifySpread(futureDates, spread); });
         return stocks;
     };
     DataService = __decorate([
@@ -78060,7 +78077,7 @@ var DataService = (function () {
 }());
 exports.DataService = DataService;
 
-},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":336}],365:[function(require,module,exports){
+},{"../classes/stock":352,"@angular/core":148,"@angular/http":238,"lodash":329,"rxjs/add/operator/map":336}],366:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -78089,7 +78106,7 @@ var DateService = (function () {
 }());
 exports.DateService = DateService;
 
-},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":336}],366:[function(require,module,exports){
+},{"@angular/core":148,"@angular/http":238,"rxjs/add/operator/map":336}],367:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -78165,5 +78182,5 @@ var QuantileService = (function () {
 }());
 exports.QuantileService = QuantileService;
 
-},{"@angular/core":148,"d3":328}]},{},[356])(356)
+},{"@angular/core":148,"d3":328}]},{},[357])(357)
 });
