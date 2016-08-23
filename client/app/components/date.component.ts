@@ -1,25 +1,12 @@
-import {
-    Component,
-    Input,
-    Output,
-    EventEmitter
-}
-from '@angular/core';
+/* Angular imports */
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
-import {
-    DateService
-}
-from '../services/date.service';
+/* Service imports */
+import { DateService } from '../services/date.service';
 
-//import constants
-import {
-    hpOptions,
-    jump,
-    jumpOptions,
-    gap,
-    gapOptions
-}
-from '../constants';
+/* App constants */
+import { hpOptions, jump, jumpOptions, gap, gapOptions } from '../constants';
 
 @Component({
     selector: 'date-component',

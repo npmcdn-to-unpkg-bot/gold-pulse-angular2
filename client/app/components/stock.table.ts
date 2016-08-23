@@ -57,7 +57,6 @@ from '../constants';
     selector: 'stock-table',
     templateUrl: './templates/stock.table.html',
     styleUrls: ['./css/stock.table.css'],
-    pipes: [MatchPipe, SortPipe, CustomPercentPipe, MetricPipe, FormatPipe, ThresholdPipe]
 })
 
 export class StockTable {

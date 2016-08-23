@@ -1,8 +1,6 @@
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+//import {enableProdMode} from '@angular/core';
+import {AppModule} from './modules/app.module';
 
-import { ExplorationViewer } from './components/exploration.viewer';
-import { bootstrap } from '@angular/platform-browser-dynamic';
-import {enableProdMode} from '@angular/core';
-
-
-enableProdMode();
-bootstrap(ExplorationViewer);
+//enableProdMode();
+platformBrowserDynamic().bootstrapModule(AppModule);

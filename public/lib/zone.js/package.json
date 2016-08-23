@@ -1,6 +1,6 @@
 {
   "name": "zone.js",
-  "version": "0.6.12",
+  "version": "0.6.15",
   "description": "Zones for JavaScript",
   "main": "dist/zone-node.js",
   "browser": "dist/zone.js",
@@ -58,20 +58,20 @@
     "typings": "^0.7.12",
     "webpack": "^1.12.2"
   },
-  "gitHead": "5f366a1ca0ee00046375a25af25105fb5e66da24",
+  "gitHead": "02a41c0a04f1cdd032915448652cf2dd48893fbc",
   "homepage": "https://github.com/angular/zone.js#readme",
-  "_id": "zone.js@0.6.12",
-  "_shasum": "346aa83f4e5093fb98b31c241f4daed9290accee",
-  "_from": "zone.js@>=0.6.6 <0.7.0",
-  "_npmVersion": "3.6.0",
+  "_id": "zone.js@0.6.15",
+  "_shasum": "e30be380c89dc8de3f70b7f599bb55882e6fd328",
+  "_from": "zone.js@0.6.15",
+  "_npmVersion": "3.7.3",
   "_nodeVersion": "5.5.0",
   "_npmUser": {
     "name": "angularcore",
     "email": "angular-core+npm@google.com"
   },
   "dist": {
-    "shasum": "346aa83f4e5093fb98b31c241f4daed9290accee",
-    "tarball": "https://registry.npmjs.org/zone.js/-/zone.js-0.6.12.tgz"
+    "shasum": "e30be380c89dc8de3f70b7f599bb55882e6fd328",
+    "tarball": "https://registry.npmjs.org/zone.js/-/zone.js-0.6.15.tgz"
   },
   "maintainers": [
     {
@@ -85,7 +85,7 @@
   ],
   "_npmOperationalInternal": {
     "host": "packages-16-east.internal.npmjs.com",
-    "tmp": "tmp/zone.js-0.6.12.tgz_1461108132653_0.6872482218313962"
+    "tmp": "tmp/zone.js-0.6.15.tgz_1471627240048_0.9166294175665826"
   },
-  "_resolved": "https://registry.npmjs.org/zone.js/-/zone.js-0.6.12.tgz"
+  "_resolved": "https://registry.npmjs.org/zone.js/-/zone.js-0.6.15.tgz"
 }

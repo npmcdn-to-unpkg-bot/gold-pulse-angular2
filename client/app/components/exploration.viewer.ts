@@ -53,10 +53,7 @@ from '../pipes/shorten.pipe';
 @Component({
   selector: 'exploration-viewer',
   templateUrl: './templates/exploration.viewer.html',
-  styleUrls: ['./css/exploration.viewer.css'],
-  directives: [StockTable, DateComponent],
-  pipes: [ShortenPipe],
-  providers: [HTTP_PROVIDERS, DataService, DateService, QuantileService]
+  styleUrls: ['./css/exploration.viewer.css']
 })
 export class ExplorationViewer {
   constructor(private _dataService: DataService) {

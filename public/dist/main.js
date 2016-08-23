@@ -1,7 +1,5 @@
 "use strict";
-var exploration_viewer_1 = require('./components/exploration.viewer');
 var platform_browser_dynamic_1 = require('@angular/platform-browser-dynamic');
-var core_1 = require('@angular/core');
-core_1.enableProdMode();
-platform_browser_dynamic_1.bootstrap(exploration_viewer_1.ExplorationViewer);
+var app_module_1 = require('./modules/app.module');
+platform_browser_dynamic_1.platformBrowserDynamic().bootstrapModule(app_module_1.AppModule);
 //# sourceMappingURL=main.js.map
