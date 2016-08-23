@@ -8,6 +8,7 @@
     "clean": "rm -rf ./public/dist",
     "typings": "typings install",
     "postinstall": "npm run typings",
+    "compile:scss": "node-sass -o public/css client/scss/main.scss",
     "build": "npm run clean && tsc",
     "build_prod": "npm run build && browserify -s main public/dist/main.js > public/dist/bundle.js && npm run minify",
     "minify": "uglifyjs public/dist/bundle.js --compress --mangle --output public/dist/bundle.min.js"
@@ -22,6 +23,7 @@
   ],
   "devDependencies": {
     "browserify": "^13.0.1",
+    "node-sass": "^3.8.0",
     "typescript": "^1.9.0-dev.20160625-1.0",
     "typings": "1.0.4",
     "uglifyjs": "^2.4.10"

@@ -1,0 +1,131 @@
+$base-color: rgb(238, 221, 130);
+$lighter-color: #FAF3DD;
+$font-stack: font-awesome,
+sans-serif;
+$header-font-stack: "Oswald Regular",
+sans-serif;
+
+body {
+    background-color: $base-color;
+    font-family: $font-stack;
+    padding-top: 31px;
+}
+
+.navbar {
+    background-color: $lighter-color;
+    a {
+        font-family: $header-font-stack;
+        text-transform: uppercase;
+    }
+}
+
+#masthead {
+    background-color: $lighter-color;
+    h1 {
+        font-family: $header-font-stack;
+        font-size: 55px;
+        margin: 0 auto;
+    }
+}
+
+a {
+    color: rgb(77, 117, 152);
+}
+
+.highlight {
+    background-color: white;
+    color: black;
+    font-weight: bold;
+}
+
+table {
+    thead {
+        background-color: #FAF3DD;
+        td {
+            font-family: $header-font-stack;
+            text-transfrom: uppercase;
+        }
+    }
+}
+
+.red {
+    background-color: rgb(245, 230, 224);
+}
+
+.yellow {
+    background-color: rgb(234, 227, 161);
+}
+
+.blue {
+    background-color: rgb(140, 175, 206);
+}
+
+.green {
+    background-color: rgb(161, 194, 153);
+}
+
+table caption {
+    width: 100%;
+    text-align: center;
+}
+
+.table-right {
+    text-align: right;
+}
+
+.legend {
+    list-style: none;
+    display: inline-block;
+}
+
+.legend li {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.legend span {
+    border: 1px solid #ccc;
+    float: left;
+    width: 12px;
+    height: 12px;
+    margin: 2px;
+}
+
+.legend .q1 {
+    background-color: rgb(245, 230, 224);
+}
+
+.legend .q2 {
+    background-color: rgb(234, 227, 161);
+}
+
+.legend .q3 {
+    background-color: rgb(140, 175, 206);
+}
+
+.legend .q4 {
+    background-color: rgb(161, 194, 153);
+}
+
+.div-inline {
+    display: inline-block;
+}
+
+.div-inline .dropdown-toggle {
+    position: relative;
+    top: 15px;
+}
+
+.span-inline {
+    display: inline-block;
+}
+
+.span-inline label {
+    display: block;
+    font-weight: normal;
+    text-align: center;
+}
+
+.align-up {
+    padding-bottom: 8px;
+}
