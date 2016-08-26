@@ -10,6 +10,12 @@ body {
     font-family: $font-stack;
     padding-top: 31px;
 }
+@media (max-width: 1100px){
+.extra-padding {
+    padding-top: 81px;
+}
+    
+}
 
 .navbar {
     background-color: $lighter-color;

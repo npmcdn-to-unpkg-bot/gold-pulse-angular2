@@ -9,7 +9,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-        <a class="navbar-brand" href="#">Brand</a>
+        <a class="navbar-brand" href="#"><img src="https://www.goldminerpulse.com/favicon.ico" alt="Brand"/></a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -19,17 +19,35 @@
           <li><a href="#">Help</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Link</a></li>
+          <!--Limit-->
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="">Limit to: {{limit}} <span class="caret"></span></a>
             <ul class="dropdown-menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">Separated link</a></li>
+              <li *ngFor='let option of limitOptions | shorten: stocks.length'><a href="#" (click)='limit = option'>{{option}}</a></li>
+              <li><a href="#" (click)='limit = stocks.length'>{{stocks.length}}</a>
+              </li>
             </ul>
           </li>
+          <!-- /Limit -->
+          <!-- Spread -->
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="">Buy/Sell Spread in cents: {{spread}} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li *ngFor='let option of spreadOptions'><a href="#" (click)='modifySpread(option)'>{{option}}</a></li>
+            </ul>
+          </li>
+          <!-- /Spread -->
+          <!-- Thresholds -->
+          <li class=" dropdown" *ngFor='let threshold of thresholds'>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="">{{threshold.short}} {{displayThreshold(threshold.sid)}} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#" (click)='deactivateThreshold(threshold.sid)'>none</a></li>
+              <li *ngFor='let gt of threshold.gt'><a href="#" (click)='activateThreshold(threshold.sid, "gt", gt)'> at least {{gt}}</a></li>
+              <li *ngFor='let lt of threshold.lt'><a href="#" (click)='activateThreshold(threshold.sid, "lt", lt)'> at most {{lt}}</a></li>
+              <li *ngFor='let eq of threshold.eq'><a href="#" (click)='activateThreshold(threshold.sid, "eq", eq)'>{{eq}}</a></li>
+            </ul>
+          </li>
+          <!-- /Thresholds -->
         </ul>
       </div>
       <!-- /.navbar-collapse -->
@@ -41,7 +59,7 @@
   <div class='container'>
     <div class='row'>
       <div class='col-md-7'>
-      <h1> TSX/TSXv Gold Exp/Dev <p class='lead'>Data Exploration Tool</p></h1>  
+        <h1> TSX/TSXv Gold Exp/Dev <p class='lead'>Data Exploration Tool</p></h1>
       </div>
     </div>
   </div>
@@ -49,60 +67,10 @@
 
 
 <div class="well">
-  <div class="row">
-    <div class="col-sm-12">
-      <date-component [currentDate]='currentDate' [hp]='hp' (updateHp)='update($event)' (updateCurrentDate)='update($event)'>
-      </date-component>
-    </div>
-  </div>
-  <!--row-->
-  <div class="row">
-    <!--column-->
-    <div class="col-sm-4">
-      <div class="div-inline">
-        <ul class="nav nav-tabs">
-          <li class="active dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="">Limit to: {{limit}} <span class="caret"></span>
-        </a>
-            <ul class="dropdown-menu">
-              <li *ngFor='let option of limitOptions | shorten: stocks.length'><a href="#" (click)='limit = option'>{{option}}</a></li>
-              <li><a href="#" (click)='limit = stocks.length'>{{stocks.length}}</a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <div class="div-inline">
-        <ul class="nav nav-tabs">
-          <li class="active dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="">Buy/Sell Spread in cents: {{spread}} <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li *ngFor='let option of spreadOptions'><a href="#" (click)='modifySpread(option)'>{{option}}</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <!--end:column-->
-    <!--column-->
-    <div class='col-sm-8' *ngIf='thresholds.length'>
-      <div class="div-inline pull-right" *ngFor='let threshold of thresholds'>
-        <ul class="nav nav-tabs">
-          <li class="active dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="">{{threshold.short}} {{displayThreshold(threshold.sid)}} <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#" (click)='deactivateThreshold(threshold.sid)'>none</a></li>
-              <li *ngFor='let gt of threshold.gt'><a href="#" (click)='activateThreshold(threshold.sid, "gt", gt)'> at least {{gt}}</a></li>
-              <li *ngFor='let lt of threshold.lt'><a href="#" (click)='activateThreshold(threshold.sid, "lt", lt)'> at most {{lt}}</a></li>
-              <li *ngFor='let eq of threshold.eq'><a href="#" (click)='activateThreshold(threshold.sid, "eq", eq)'>{{eq}}</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <!--end:column-->
-  </div>
-  <!--end:row-->
+  <date-component [currentDate]='currentDate' [hp]='hp' (updateHp)='update($event)' (updateCurrentDate)='update($event)'>
+  </date-component>
 </div>
+<!--row-->
+
 
 <stock-table [stocks]='stocks' [metaDefs]='metaDefs' [futureDates]='futureDates' [cpMetaDefs]='cpMetaDefs' [benchmarks]='benchmarks' [limit]='limit' [currentDate]='currentDate' [spread]='spread' [thresholds]='activeThresholds'></stock-table>

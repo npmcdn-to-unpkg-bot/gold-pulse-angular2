@@ -3,6 +3,10 @@ body {
   font-family: font-awesome, sans-serif;
   padding-top: 31px; }
 
+@media (max-width: 1100px) {
+  .extra-padding {
+    padding-top: 81px; } }
+
 .navbar {
   background-color: #FAF3DD; }
   .navbar a {
